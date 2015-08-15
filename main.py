@@ -5,11 +5,14 @@ import argparse
 
 def main():
 	parser = argparse.ArgumentParser(description='Generate a visual HTML/CSS output from a JSON file based on a JSOV template')
-	parser.add_argument('-t', '--template', nargs=1, type=file)
-	parser.add_argument('--no-output', nargs=0, action='store_true')
-	parser.add_argument('--html-output', nargs=1, type=file)
-	parser.add_argument('--css-output', nargs=1, type=file)
+	parser.add_argument('-t', '--template', nargs=1, required=True, type=argparse.FileType('r'), help='the JSOV template file')
+	parser.add_argument('--no-output', action='store_true', help='do not write to any output files')
+	parser.add_argument('--html-output', nargs=1, type=argparse.FileType('w'), help='HTML output filename')
+	parser.add_argument('--css-output', nargs=1, type=argparse.FileType('w'), help='CSS output filename')
+	parser.add_argument('-f', '--format', nargs=1, default='html', help='the visual format for the output (HTML by default)')
+	parser.add_argument('inputfile', type=argparse.FileType('r'), help='input JSON file')
+	args = parser.parse_args()
 
 
 if __name__ == "__main__":
-	pass
+	main()
