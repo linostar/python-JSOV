@@ -1,0 +1,7 @@
+{
+	"Players": {
+		"John": {"HP": 10, "MP": 5, "Score": 2, "Bonus": 0},
+		"Nancy": {"HP": 2, "MP": 6, "Score": 7, "Bonus": 2},
+		"Ben": {"HP": 20, "MP": 4, "Score": 12, "Bonus": 1}
+	}
+}
