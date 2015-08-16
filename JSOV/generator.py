@@ -7,8 +7,8 @@ import yaml
 
 class Generator:
 	children_attributes = {
-	"bgcolor": r"^#[0-9a-f]{1,6}$",
-	"fgcolor": r"^#[0-9a-f]{1,6}$",
+	"bgcolor": r"^\#[0-9a-f]{1,6}$",
+	"fgcolor": r"^\#[0-9a-f]{1,6}$",
 	"rounded-corners": r"^\d+$",
 	"cascading": r"^(vertical|horizontal|tabular)$",
 	"title": "",
@@ -81,17 +81,17 @@ class Generator:
 		if isinstance(element, dict):
 			for key in element.keys():
 				if key in self.children_attributes:
-					print(element[key])
 					if not self.children_attributes[key] and not (isinstance(element[key], dict) \
 						or isinstance(element[key], list)):
 						print("Error: element '{}' must be a JSOV object.".format(key))
 						return False
 					if isinstance(element[key], str):
 						if not re.match(self.children_attributes[key], element[key], re.IGNORECASE):
-							print("Error: attribute '{}' has an unaccepted value.")
+							print("Error: attribute '{}' has an unaccepted value: '{}'."
+								.format(key, element[key]))
 							return False
-					if isinstance(element[key], dict) or isinstance(element[key], list):
-						res &= self.parse_jsov_attributes(element[key])
+				if isinstance(element[key], dict) or isinstance(element[key], list):
+					res &= self.parse_jsov_attributes(element[key])
 		return res
 
 	def generate_html(self, output_html=None, output_css=None):
