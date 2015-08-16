@@ -10,7 +10,7 @@ root:
           bgcolor: "#ffffff"
           fgcolor: "#000000"
           align: center
-        defaut-child:
+        default-child:
           fgcolor: "#ffffff"
         children:
           - HP:
