@@ -2,7 +2,7 @@ root:
   display: false
   children:
     - players:
-        cascading: vertical
+        cascading: vaerticala
         bgcolor: "#00bbbb"
         fgcolor: "#ffffff"
         rounded-corners: 5

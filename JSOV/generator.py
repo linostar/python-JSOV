@@ -74,16 +74,25 @@ class Generator:
 		return True
 
 	def parse_jsov_attributes(self, element):
+		res = True
+		if isinstance(element, list):
+			for item in element:
+				res &= self.parse_jsov_attributes(item)
 		if isinstance(element, dict):
 			for key in element.keys():
 				if key in self.children_attributes:
-					if not self.children_attributes[key] and not isinstance(element[key], dict):
+					print(element[key])
+					if not self.children_attributes[key] and not (isinstance(element[key], dict) \
+						or isinstance(element[key], list)):
 						print("Error: element '{}' must be a JSOV object.".format(key))
 						return False
-					if not re.match(self.children_attributes[key], element[key], re.IGNORECASE):
-						print("Error: attribute '{}' has an unaccepted value.")
-						return False
-		return True
+					if isinstance(element[key], str):
+						if not re.match(self.children_attributes[key], element[key], re.IGNORECASE):
+							print("Error: attribute '{}' has an unaccepted value.")
+							return False
+					if isinstance(element[key], dict) or isinstance(element[key], list):
+						res &= self.parse_jsov_attributes(element[key])
+		return res
 
 	def generate_html(self, output_html=None, output_css=None):
-		return self.check_jsov()
+		return self.check_jsov(), self.parse_jsov_attributes(self.template["root"])
