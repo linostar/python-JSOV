@@ -44,13 +44,26 @@ class Generator:
 		res = True
 		for param in list(child.values())[0].keys():
 			if param not in self.children_attributes:
-				print("Error: '{}' is not a recognized attribute.".format(param))
+				print("Error: '{}'' is not a recognized attribute.".format(param))
 				return False
 			if param == "children":
 				for onlykey in child.keys():
 					for newchild in child[onlykey]['children']:
 						res &= self.check_jsov_children(newchild)
+			if param == "title":
+				for onlykey in child.keys():
+					res &= self.check_jsov_special(child[onlykey]['title'])
+			if param == "default-child":
+				for onlykey in child.keys():
+					res &= self.check_jsov_special(child[onlykey]['default-child'])
 		return res
+
+	def check_jsov_special(self, special):
+		for key in special.keys():
+			if key not in self.children_attributes:
+				print("Error: '{}' is not a recognized attribute.".format(key))
+				return False
+		return True
 
 
 	def generate_html(self, output_html=None, output_css=None):

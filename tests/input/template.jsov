@@ -5,11 +5,11 @@ root:
         cascading: vertical
         bgcolor: "#00bbbb"
         fgcolor: "#ffffff"
-        rounded-corners: true
+        rounded-corners: 5
         title:
           bgcolor: "#ffffff"
           fgcolor: "#000000"
-          align: center
+          rounded-corners: 5
         default-child:
           fgcolor: "#ffffff"
         children:
