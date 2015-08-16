@@ -1,12 +1,20 @@
 import os
 import json
+import re
 
 import yaml
 
 
 class Generator:
-	children_attributes = ["bgcolor", "fgcolor", "rounded-corners", "cascading", "title",
-	"default-child", "children"]
+	children_attributes = {
+	"bgcolor": r"^#[0-9a-f]{1,6}$",
+	"fgcolor": r"^#[0-9a-f]{1,6}$",
+	"rounded-corners": r"^\d+$",
+	"cascading": r"^(vertical|horizontal|tabular)$",
+	"title": "",
+	"default-child": "",
+	"children": "",
+	}
 
 	def __init__(self, jsonfile, jsovfile):
 		self.jsonfile = jsonfile
@@ -43,8 +51,8 @@ class Generator:
 	def check_jsov_children(self, child):
 		res = True
 		for param in list(child.values())[0].keys():
-			if param not in self.children_attributes:
-				print("Error: '{}'' is not a recognized attribute.".format(param))
+			if param not in self.children_attributes.keys():
+				print("Error: '{}' is not a recognized attribute.".format(param))
 				return False
 			if param == "children":
 				for onlykey in child.keys():
@@ -60,11 +68,22 @@ class Generator:
 
 	def check_jsov_special(self, special):
 		for key in special.keys():
-			if key not in self.children_attributes:
+			if key not in self.children_attributes.keys():
 				print("Error: '{}' is not a recognized attribute.".format(key))
 				return False
 		return True
 
+	def parse_jsov_attributes(self, element):
+		if isinstance(element, dict):
+			for key in element.keys():
+				if key in self.children_attributes:
+					if not self.children_attributes[key] and not isinstance(element[key], dict):
+						print("Error: element '{}' must be a JSOV object.".format(key))
+						return False
+					if not re.match(self.children_attributes[key], element[key], re.IGNORECASE):
+						print("Error: attribute '{}' has an unaccepted value.")
+						return False
+		return True
 
 	def generate_html(self, output_html=None, output_css=None):
 		return self.check_jsov()
