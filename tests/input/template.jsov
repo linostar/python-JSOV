@@ -2,22 +2,22 @@ root:
   display: false
   children:
     - players:
-      alignment: vertical
-      bgcolor: "#00bbbb"
-      fgcolor: "#ffffff"
-      rounded-corners: true
-      title:
-        bgcolor: "#ffffff"
-        fgcolor: "#000000"
-        align: "center"
-      defaut-child:
+        cascading: vertical
+        bgcolor: "#00bbbb"
         fgcolor: "#ffffff"
-      children:
-        - HP:
-          bgcolor: "#00dd00"
-        - MP:
-          bgcolor: "#0000dd"
-        - Bonus:
-          bgcolor: "#dddd00"
-        - Score:
-          bgcolor: "#dd0000"
+        rounded-corners: true
+        title:
+          bgcolor: "#ffffff"
+          fgcolor: "#000000"
+          align: center
+        defaut-child:
+          fgcolor: "#ffffff"
+        children:
+          - HP:
+              bgcolor: "#00dd00"
+          - MP:
+              bgcolor: "#0000dd"
+          - Bonus:
+              bgcolor: "#dddd00"
+          - Score:
+              bgcolor: "#dd0000"
