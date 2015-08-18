@@ -15,5 +15,3 @@ class Utils:
 			return string[0].upper() + string[1:]
 		elif len(string):
 			return string.upper()
-		else:
-			return ""

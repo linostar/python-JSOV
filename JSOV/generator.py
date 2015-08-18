@@ -1,8 +1,11 @@
 import os
 import json
 import re
+from itertools import islice
 
 import yaml
+import dpath
+import dpath.options
 
 from .utils import Utils
 
@@ -19,6 +22,7 @@ class Generator:
 	}
 
 	def __init__(self, jsonfile, jsovfile):
+		dpath.options.ALLOW_EMPTY_STRING_KEYS = True
 		self.jsonfile = jsonfile
 		self.jsovfile = jsovfile[0]
 		self.load_dicts()
@@ -97,9 +101,21 @@ class Generator:
 		return res
 
 	def generate_css(self):
-
+		style = ""
+		children = dpath.util.get(self.template, "/root/children")
+		for child in children:
+			key = list(islice(child, 1))[0]
+			style += "." + str(key) + " {\n"
+			if "bgcolor" in child[key]:
+				style += "background-color: " + child[key]['bgcolor'] + ";\n"
+			if "fgcolor" in child[key]:
+				style += "color: " + child[key]['fgcolor'] + ";\n"
+			if "rounded-corners" in child[key]:
+				style += "border-radius: " + child[key]['rounded-corners'] + "px;\n"
+			style += "}\n"
+		print(style)
 
 	def generate_htmlcss(self, output_html=None, output_css=None):
 		if "display" in self.template['root']:
 			if not self.template['root']['display']:
-				pass
+				self.generate_css()
