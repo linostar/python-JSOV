@@ -11,6 +11,7 @@ from .utils import Utils
 
 
 class Generator:
+	TAB = "  "
 	children_attributes = {
 	"bgcolor": r"^\#[0-9a-f]{1,6}$",
 	"fgcolor": r"^\#[0-9a-f]{1,6}$",
@@ -100,22 +101,29 @@ class Generator:
 					res &= self.parse_jsov_attributes(element[key])
 		return res
 
-	def generate_css(self):
+	def generate_css(self, jsov, node, parent):
 		style = ""
-		children = dpath.util.get(self.template, "/root/children")
-		for child in children:
-			key = list(islice(child, 1))[0]
-			style += "." + str(key) + " {\n"
-			if "bgcolor" in child[key]:
-				style += "background-color: " + child[key]['bgcolor'] + ";\n"
-			if "fgcolor" in child[key]:
-				style += "color: " + child[key]['fgcolor'] + ";\n"
-			if "rounded-corners" in child[key]:
-				style += "border-radius: " + child[key]['rounded-corners'] + "px;\n"
-			style += "}\n"
+		try:
+			children = dpath.util.get(jsov, "/" + node + "/children")
+			for child in children:
+				key = list(islice(child, 1))[0]
+				if parent:
+					style += "." + str(parent) + "-" + str(key) + " {\n"
+				else:
+					style += "." + str(key) + " {\n"
+				if "bgcolor" in child[key]:
+					style += self.TAB + "background-color: " + str(child[key]['bgcolor']) + ";\n"
+				if "fgcolor" in child[key]:
+					style += self.TAB + "color: " + str(child[key]['fgcolor']) + ";\n"
+				if "rounded-corners" in child[key]:
+					style += self.TAB + "border-radius: " + str(child[key]['rounded-corners']) + "px;\n"
+				style += "}\n\n"
+			self.generate_css(child, key, key)
+		except KeyError:
+			pass
 		print(style)
 
 	def generate_htmlcss(self, output_html=None, output_css=None):
 		if "display" in self.template['root']:
 			if not self.template['root']['display']:
-				self.generate_css()
+				self.generate_css(self.template, "root", "")
