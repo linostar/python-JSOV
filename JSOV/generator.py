@@ -21,6 +21,15 @@ class Generator:
 		self.jsovfile = jsovfile[0]
 		self.load_dicts()
 
+	def lower_keys(self, d):
+		new_d = {}
+		for key, val in d.items():
+			if isinstance(d[key], dict):
+				new_d[str(key).lower()] = self.lower_keys(d[key])
+			else:
+				new_d[str(key).lower()] = val
+		return new_d
+
 	def load_dicts(self):
 		if not os.path.exists(self.jsonfile):
 			print("Error: inputfile '{}' could not be found.".format(self.jsonfile))
@@ -29,9 +38,9 @@ class Generator:
 			print("Error: template '{}' could not be found.".format(self.jsovfile))
 			sys.exit(1)
 		with open(self.jsonfile, "r") as json_fp:
-			self.input = json.load(json_fp)
+			self.input = self.lower_keys(json.load(json_fp))
 		with open(self.jsovfile, "r") as jsov_fp:
-			self.template = yaml.load(jsov_fp)
+			self.template = self.lower_keys(yaml.load(jsov_fp))
 
 	def check_jsov(self):
 		if not "root" in self.template:
@@ -95,4 +104,6 @@ class Generator:
 		return res
 
 	def generate_html(self, output_html=None, output_css=None):
-		return self.check_jsov(), self.parse_jsov_attributes(self.template["root"])
+		if "display" in self.template['root']:
+			if not self.template['root']['display']:
+				pass
