@@ -4,7 +4,7 @@ root:
     - players:
         cascading: vertical
         bgcolor: "#00bbbb"
-        fgcolor: "#ffffff"
+        fgcolor: "#cccccc"
         rounded-corners: 5
         title:
           bgcolor: "#ffffff"

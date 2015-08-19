@@ -101,11 +101,19 @@ class Generator:
 					res &= self.parse_jsov_attributes(element[key])
 		return res
 
+	def has_defaultchild(self, jsov, node):
+		try:
+			dc = dpath.util.get(jsov, "/" + node + "/default-child")
+			return dc
+		except KeyError:
+			return False
+
 	def generate_css(self, jsov, node, parent):
 		# for 'children' elements
 		style = ""
 		try:
 			children = dpath.util.get(jsov, "/" + node + "/children")
+			has_dc = self.has_defaultchild(jsov, node)
 			if not isinstance(children, list):
 				children = [children]
 			for child in children:
@@ -120,9 +128,17 @@ class Generator:
 					style += self.TAB + "color: " + str(child[key]['fgcolor']) + ";\n"
 				if "rounded-corners" in child[key]:
 					style += self.TAB + "border-radius: " + str(child[key]['rounded-corners']) + "px;\n"
+				# add default-child attributes to each of the children
+				if has_dc:
+					for attribute, value in has_dc.items():
+						if attribute == "bgcolor":
+							style += self.TAB + "background-color: " + str(value) + ";\n"
+						elif attribute == "fgcolor":
+							style += self.TAB + "color: " + str(value) + ";\n"
+						elif attribute == "rounded-corners":
+							style += self.TAB + "border-radius: " + str(value) + "px;\n"
 				style += "}\n\n"
-			return style + self.generate_css(child, key, key) + self.generate_css_title(child, key, key) \
-			+ self.generate_css_defaultchild(child, key, key)
+			return style + self.generate_css(child, key, key) + self.generate_css_title(child, key, key)
 		except KeyError:
 			return ""
 
@@ -136,27 +152,6 @@ class Generator:
 			else:
 				style += "." + "root_title" + " {\n"
 			for attribute, value in title.items():
-				if attribute == "bgcolor":
-					style += self.TAB + "background-color: " + str(value) + ";\n"
-				elif attribute == "fgcolor":
-					style += self.TAB + "color: " + str(value) + ";\n"
-				elif attribute == "rounded-corners":
-					style += self.TAB + "border-radius: " + str(value) + "px;\n"
-			style += "}\n\n"
-			return style
-		except KeyError:
-			return ""
-
-	def generate_css_defaultchild(self, jsov, node, parent):
-		# for 'default-child' elements
-		style = ""
-		try:
-			default_child = dpath.util.get(jsov, "/" + node + "/default-child")
-			if parent:
-				style += "." + str(parent) + "_default-child" + "{\n"
-			else:
-				style += "." + "root_default-child" + " {\n"
-			for attribute, value in default_child.items():
 				if attribute == "bgcolor":
 					style += self.TAB + "background-color: " + str(value) + ";\n"
 				elif attribute == "fgcolor":
