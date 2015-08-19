@@ -16,7 +16,10 @@ def main():
 	parser.add_argument('inputfile', help='input JSON file')
 	args = parser.parse_args()
 	visualizer = generator.Generator(args.inputfile, args.template)
-	visualizer.generate_htmlcss()
+	if args.no_output:
+		print(visualizer.generate_htmlcss())
+	else:
+		visualizer.generate_htmlcss(args.html_output, args.css_output)
 	
 
 if __name__ == "__main__":

@@ -163,7 +163,19 @@ class Generator:
 		except KeyError:
 			return ""
 
+	def generate_html(self, jsov):
+		return ""
+
 	def generate_htmlcss(self, output_html=None, output_css=None):
 		if "display" in self.template['root']:
 			if not self.template['root']['display']:
-				print(self.generate_css(self.template, "root", ""))
+				html_out = self.generate_html(self.template)
+				css_out = self.generate_css(self.template, "root", "")
+				print(os.path.dirname(os.path.dirname(__file__)))
+				if output_html:
+					with open(output_html, "w") as fp:
+						fp.write(html_out)
+				if output_css:
+					with open(output_css, "w") as fp:
+						fp.write(css_out)
+				return html_out, css_out
