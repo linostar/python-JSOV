@@ -108,7 +108,7 @@ class Generator:
 			for child in children:
 				key = list(islice(child, 1))[0]
 				if parent:
-					style += "." + str(parent) + "-" + str(key) + " {\n"
+					style += "." + str(parent) + "_" + str(key) + " {\n"
 				else:
 					style += "." + str(key) + " {\n"
 				if "bgcolor" in child[key]:
@@ -118,12 +118,11 @@ class Generator:
 				if "rounded-corners" in child[key]:
 					style += self.TAB + "border-radius: " + str(child[key]['rounded-corners']) + "px;\n"
 				style += "}\n\n"
-			self.generate_css(child, key, key)
+			return style + self.generate_css(child, key, key)
 		except KeyError:
-			pass
-		print(style)
+			return ""
 
 	def generate_htmlcss(self, output_html=None, output_css=None):
 		if "display" in self.template['root']:
 			if not self.template['root']['display']:
-				self.generate_css(self.template, "root", "")
+				print(self.generate_css(self.template, "root", ""))
