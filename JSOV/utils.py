@@ -1,4 +1,5 @@
 import os
+import re
 
 class Utils:
 	@staticmethod
@@ -29,3 +30,8 @@ class Utils:
 	def full_path(path):
 		fdir = os.path.dirname(os.path.dirname(__file__))
 		return os.path.join(fdir, path)
+
+	@staticmethod
+	def add_eol(string):
+		new_string = re.sub(r"><", r">\n<", string)
+		return new_string + "\n"

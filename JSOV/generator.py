@@ -171,7 +171,7 @@ class Generator:
 					key2 = str(key)
 				else:
 					key2 = parent + "__" + str(key)
-				html += "<div class='{}'>".format(key2)
+				html += '<div class="{}">'.format(key2)
 				html += str(self.generate_html(json_obj[key], key))
 				html += "</div>\n"
 				return html
@@ -180,7 +180,7 @@ class Generator:
 
 	def generate_htmlcss(self, output_html=None, output_css=None):
 		if not self.template['root']['display']:
-			html_out = self.generate_html(self.input, "root")
+			html_out = Utils.add_eol(self.generate_html(self.input, "root"))
 			css_out = self.generate_css(self.template, "root", "")
 			if output_html:
 				with open(Utils.full_path(output_html[0]), "w") as fp:
