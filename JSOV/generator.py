@@ -171,11 +171,10 @@ class Generator:
 			if not self.template['root']['display']:
 				html_out = self.generate_html(self.template)
 				css_out = self.generate_css(self.template, "root", "")
-				print(os.path.dirname(os.path.dirname(__file__)))
 				if output_html:
-					with open(output_html, "w") as fp:
+					with open(Utils.full_path(output_html[0]), "w") as fp:
 						fp.write(html_out)
 				if output_css:
-					with open(output_css, "w") as fp:
+					with open(Utils.full_path(output_css[0]), "w") as fp:
 						fp.write(css_out)
 				return html_out, css_out

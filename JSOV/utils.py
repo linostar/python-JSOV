@@ -1,3 +1,5 @@
+import os
+
 class Utils:
 	@staticmethod
 	def lower_keys(dic):
@@ -22,3 +24,8 @@ class Utils:
 			return string.upper()
 		else:
 			return ""
+
+	@staticmethod
+	def full_path(path):
+		fdir = os.path.dirname(os.path.dirname(__file__))
+		return os.path.join(fdir, path)
