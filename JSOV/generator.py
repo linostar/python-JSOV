@@ -163,18 +163,29 @@ class Generator:
 		except KeyError:
 			return ""
 
-	def generate_html(self, jsov):
-		return ""
+	def generate_html(self, json_obj, parent):
+		html = ""
+		if isinstance(json_obj, dict):
+			for key in json_obj:
+				if parent == "root":
+					key2 = str(key)
+				else:
+					key2 = parent + "__" + str(key)
+				html += "<div class='{}'>\n".format(key2)
+				html += self.generate_html(json_obj[key], key)
+				html += "</div>\n"
+				return html
+		else:
+			return json_obj
 
 	def generate_htmlcss(self, output_html=None, output_css=None):
-		if "display" in self.template['root']:
-			if not self.template['root']['display']:
-				html_out = self.generate_html(self.template)
-				css_out = self.generate_css(self.template, "root", "")
-				if output_html:
-					with open(Utils.full_path(output_html[0]), "w") as fp:
-						fp.write(html_out)
-				if output_css:
-					with open(Utils.full_path(output_css[0]), "w") as fp:
-						fp.write(css_out)
-				return html_out, css_out
+		if not self.template['root']['display']:
+			html_out = self.generate_html(self.template)
+			css_out = self.generate_css(self.template, "root", "")
+			if output_html:
+				with open(Utils.full_path(output_html[0]), "w") as fp:
+					fp.write(html_out)
+			if output_css:
+				with open(Utils.full_path(output_css[0]), "w") as fp:
+					fp.write(css_out)
+			return html_out, css_out
