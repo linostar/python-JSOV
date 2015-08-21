@@ -21,8 +21,17 @@ def main():
 	
 def check_args(args):
 	if args.custom and args.html_template and args.css_template:
+		if args.no_output and (args.html_output or args.css_output):
+			print("Error: Option '--no-output' does not allow '--html-output' or '--css-output'.")
+			sys.exit(1)
 		visualizer = generator.Generator(args.inputfile, args.template)
 		[html, css] = visualizer.read_htmlcss_templates(args.html_template, args.css_template)
+		if not args.no_output:
+			html_out = args.html_output if args.html_output else ["output.html"]
+			css_out = args.css_output if args.css_output else ["style.css"]
+			visualizer.generate_htmlcss(html_out, css_out)
+		else:
+			print(visualizer.generate_htmlcss())
 	elif args.custom:
 		print("Error: Option '--custom' can only be used along with '--html-template' and '--css-template'.")
 		sys.exit(1)
