@@ -33,8 +33,8 @@ def check_args(args):
 			print("Error: Option '--no-output' does not allow '--html-output' or '--css-output'.")
 			sys.exit(1)
 		else:
-			html_out = args.html_output if args.html_output else "output.html"
-			css_out = args.css_output if args.css_output else "style.css"
+			html_out = args.html_output if args.html_output else ["output.html"]
+			css_out = args.css_output if args.css_output else ["style.css"]
 			visualizer.generate_htmlcss(html_out, css_out)
 
 if __name__ == "__main__":
