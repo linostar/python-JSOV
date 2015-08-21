@@ -108,6 +108,19 @@ class Generator:
 		except KeyError:
 			return False
 
+	def read_htmlcss_templates(self, html_template, css_template):
+		if not os.path.exists(html_template):
+			print("Error: HTML template '{}' could not be found.".format(html_template))
+			sys.exit(1)
+		if not os.path.exists(css_template):
+			print("Error: CSS template '{}' could not be found.".format(css_template))
+			sys.exit(1)
+		with open(html_template, "r") as fp_html:
+			html = fp_html.read()
+		with open(css_template, "r") as fp_css:
+			css = fp_css.read()
+		return [html, css]
+
 	def generate_css(self, jsov, node, parent):
 		# for 'children' elements
 		style = ""
