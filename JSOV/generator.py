@@ -188,6 +188,9 @@ class Generator:
 				html += str(self.generate_html(json_obj[key], key))
 				html += "</div>\n"
 				return html
+		elif isinstance(json_obj, list):
+			for child in json_obj:
+				html += str(self.generate_html(child, parent))
 		else:
 			return json_obj
 
