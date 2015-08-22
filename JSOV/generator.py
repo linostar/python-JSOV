@@ -180,16 +180,15 @@ class Generator:
 		html = ""
 		if isinstance(json_obj, dict):
 			for key in json_obj:
-				if parent == "root":
-					key2 = str(key)
-				else:
-					key2 = parent + "__" + str(key)
-				html += '<div class="{}">'.format(key2)
+				html += '<div>{}</div>'.format(key)
 				html += str(self.generate_html(json_obj[key], key))
-				html += "</div>\n"
 			return html
 		else:
-			return json_obj
+			if parent == "root":
+				key2 = str(json_obj)
+			else:
+				key2 = parent + "__" + str(json_obj)
+			return '<div class="{}">{}</div>'.format(key2, json_obj)
 
 	def generate_htmlcss(self, output_html=None, output_css=None):
 		if not self.template['root']['display']:
