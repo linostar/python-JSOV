@@ -27,11 +27,9 @@ class Generator:
 			print("Error: template '{}' could not be found.".format(self.jsovfile))
 			sys.exit(1)
 		with open(self.jsonfile, "r") as json_fp:
-			self.input0 = json.load(json_fp)
-			self.input = Utils.lower_keys(self.input0)
+			self.input = Utils.lower_keys(json.load(json_fp))
 		with open(self.jsovfile, "r") as jsov_fp:
-			self.template0 = yaml.load(jsov_fp)
-			self.template = Utils.lower_keys(self.template0)
+			self.template = Utils.lower_keys(yaml.load(jsov_fp))
 
 	def check_jsov(self):
 		if not "root" in self.template:

@@ -1,32 +1,32 @@
-.players {
+.Players {
   background-color: #00bbbb;
   color: #cccccc;
   border-radius: 5px;
 }
 
-.players__hp {
+.Players__HP {
   background-color: #00dd00;
   color: #ffffff;
 }
 
-.players__mp {
+.Players__MP {
   background-color: #0000dd;
   color: #ffffff;
 }
 
-.players__bonus {
+.Players__Bonus {
   background-color: #dddd00;
   color: #ffffff;
 }
 
-.players__score {
+.Players__Score {
   background-color: #dd0000;
   color: #ffffff;
 }
 
-.players_title{
+.Players_title{
   background-color: #ffffff;
-  border-radius: 5px;
   color: #000000;
+  border-radius: 5px;
 }
 
