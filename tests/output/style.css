@@ -7,8 +7,9 @@ div {
 .block__border {
   border-style: solid;
   border-width: 2px;
-  border-color: #00206a;
+  border-color: #ffffff;
   border-radius: 5px;
+  background-color: #00206a;
 }
 
 .Players {
@@ -23,7 +24,7 @@ div {
 }
 
 .Players__MP {
-  background-color: #0000dd;
+  background-color: #6600dd;
   color: #ffffff;
 }
 
@@ -38,8 +39,8 @@ div {
 }
 
 .Players_title{
-  background-color: #ffffff;
   color: #000000;
   border-radius: 5px;
+  background-color: #ffffff;
 }
 

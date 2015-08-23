@@ -3,8 +3,9 @@ root:
   block-border:
     border-style: solid
     border-width: 2px
-    border-color: "#00206a"
+    border-color: "#ffffff"
     rounded-corners: 5px
+    bgcolor: "#00206a"
   children:
     - Players:
         cascading: vertical
@@ -21,7 +22,7 @@ root:
           - HP:
               bgcolor: "#00dd00"
           - MP:
-              bgcolor: "#0000dd"
+              bgcolor: "#6600dd"
           - Bonus:
               bgcolor: "#dddd00"
           - Score:

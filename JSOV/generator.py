@@ -187,6 +187,9 @@ class Generator:
 			if "rounded-corners" in self.template['root']['block-border']:
 				style += self.TAB + "border-radius: {};\n".format(
 					self.template['root']['block-border']['rounded-corners'])
+			if "bgcolor" in self.template['root']['block-border']:
+				style += self.TAB + "background-color: {};\n".format(
+					self.template['root']['block-border']['bgcolor'])
 			style += "}\n\n"
 		return style
 
@@ -214,7 +217,7 @@ class Generator:
 				key2 = parent
 			else:
 				key2 = gparent + "__" + parent
-			return '<div class="{}">{}: {}</div>'.format(key2, parent, json_obj)
+			return '<div class="{}">{}: {}</div><br/>'.format(key2, parent, json_obj)
 
 	def generate_htmlcss(self, output_html=None, output_css=None):
 		if not self.template['root']['display']:
