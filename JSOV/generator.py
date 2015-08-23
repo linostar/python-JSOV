@@ -182,15 +182,22 @@ class Generator:
 		html = ""
 		if isinstance(json_obj, dict):
 			for key in json_obj:
-				html += '<div>{}</div>'.format(key)
-				html += str(self.generate_html(json_obj[key], key))
+				if isinstance(json_obj[key], dict):
+					html += '<div class="{}">'.format(key)
+					# check if this is a title
+					if parent != "root":
+						html += '<div class="{}_title">{}</div>'.format(parent, key)
+					html += str(self.generate_html(json_obj[key], key))
+					html += '</div>'
+				else:
+					html += str(self.generate_html(json_obj[key], key))
 			return html
 		else:
 			if parent == "root":
 				key2 = str(json_obj)
 			else:
 				key2 = parent + "__" + str(json_obj)
-			return '<div class="{}">{}</div>'.format(key2, json_obj)
+			return '<div class="{}">{}: {}</div>'.format(key2, parent, json_obj)
 
 	def generate_htmlcss(self, output_html=None, output_css=None):
 		if not self.template['root']['display']:
