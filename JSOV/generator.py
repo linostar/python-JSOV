@@ -189,7 +189,7 @@ class Generator:
 						html += '<div id="{}__{}">'.format(parent, key)
 					# check if this is a title
 					if parent != "root":
-						html += '<div class="{}_title">{}</div>'.format(parent, key)
+						html += '<center><div class="{}_title">{}</div></center>'.format(parent, key)
 					else:
 						gparent = key
 					html += str(self.generate_html(json_obj[key], key, gparent))
