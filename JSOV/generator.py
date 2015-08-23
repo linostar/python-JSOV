@@ -131,7 +131,7 @@ class Generator:
 				if "fgcolor" in child[key]:
 					style += self.TAB + "color: " + str(child[key]['fgcolor']) + ";\n"
 				if "rounded-corners" in child[key]:
-					style += self.TAB + "border-radius: " + str(child[key]['rounded-corners']) + "px;\n"
+					style += self.TAB + "border-radius: " + str(child[key]['rounded-corners']) + ";\n"
 				# add default-child attributes to each of the children
 				if has_dc:
 					for attribute, value in has_dc.items():
@@ -140,7 +140,7 @@ class Generator:
 						elif attribute == "fgcolor":
 							style += self.TAB + "color: " + str(value) + ";\n"
 						elif attribute == "rounded-corners":
-							style += self.TAB + "border-radius: " + str(value) + "px;\n"
+							style += self.TAB + "border-radius: " + str(value) + ";\n"
 				style += "}\n\n"
 			return style + self.generate_css(child, key, key) + self.generate_css_title(child, key, key)
 		except KeyError:
@@ -161,7 +161,7 @@ class Generator:
 				elif attribute == "fgcolor":
 					style += self.TAB + "color: " + str(value) + ";\n"
 				elif attribute == "rounded-corners":
-					style += self.TAB + "border-radius: " + str(value) + "px;\n"
+					style += self.TAB + "border-radius: " + str(value) + ";\n"
 			style += "}\n\n"
 			return style
 		except KeyError:
@@ -176,13 +176,13 @@ class Generator:
 		if "block-border" in self.template['root']:
 			style += ".block__border {\n"
 			if "border-style" in self.template['root']['block-border']:
-				style += self.TAB + "border-style: {}\n".format(
+				style += self.TAB + "border-style: {};\n".format(
 					self.template['root']['block-border']['border-style'])
 			if "border-width" in self.template['root']['block-border']:
-				style += self.TAB + "border-width: {}\n".format(
+				style += self.TAB + "border-width: {};\n".format(
 					self.template['root']['block-border']['border-width'])
 			if "border-color" in self.template['root']['block-border']:
-				style += self.TAB + "border-color: {}\n".format(
+				style += self.TAB + "border-color: {};\n".format(
 					self.template['root']['block-border']['border-color'])
 			style += "}\n\n"
 		return style

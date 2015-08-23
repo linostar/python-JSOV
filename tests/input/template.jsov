@@ -2,18 +2,18 @@ root:
   display: false
   block-border:
     border-style: solid
-    border-width: 2px
+    border-width: 1px
     border-color: black
   children:
     - Players:
         cascading: vertical
         bgcolor: "#00bbbb"
         fgcolor: "#cccccc"
-        rounded-corners: 5
+        rounded-corners: 5px
         title:
           bgcolor: "#ffffff"
           fgcolor: "#000000"
-          rounded-corners: 5
+          rounded-corners: 5px
         default-child:
           fgcolor: "#ffffff"
         children:
