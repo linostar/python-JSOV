@@ -178,30 +178,35 @@ class Generator:
 		except KeyError:
 			return ""
 
-	def generate_html(self, json_obj, parent):
+	def generate_html(self, json_obj, parent, gparent):
 		html = ""
 		if isinstance(json_obj, dict):
 			for key in json_obj:
 				if isinstance(json_obj[key], dict):
-					html += '<div class="{}">'.format(key)
+					if parent == "root":
+						html += '<div class="{}">'.format(key)
+					else:
+						html += '<div id="{}__{}">'.format(parent, key)
 					# check if this is a title
 					if parent != "root":
 						html += '<div class="{}_title">{}</div>'.format(parent, key)
-					html += str(self.generate_html(json_obj[key], key))
+					else:
+						gparent = key
+					html += str(self.generate_html(json_obj[key], key, gparent))
 					html += '</div>'
 				else:
-					html += str(self.generate_html(json_obj[key], key))
+					html += str(self.generate_html(json_obj[key], key, gparent))
 			return html
 		else:
-			if parent == "root":
-				key2 = str(json_obj)
+			if not gparent:
+				key2 = parent
 			else:
-				key2 = parent + "__" + str(json_obj)
+				key2 = gparent + "__" + parent
 			return '<div class="{}">{}: {}</div>'.format(key2, parent, json_obj)
 
 	def generate_htmlcss(self, output_html=None, output_css=None):
 		if not self.template['root']['display']:
-			html_out = Utils.add_eol(self.generate_html(self.input, "root"))
+			html_out = Utils.add_eol(self.generate_html(self.input, "root", ""))
 			css_out = self.generate_css(self.template, "root", "")
 			if output_html:
 				with open(Utils.full_path(output_html[0]), "w") as fp:
