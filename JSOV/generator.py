@@ -167,6 +167,14 @@ class Generator:
 		except KeyError:
 			return ""
 
+	def generate_default_css(self):
+		style = "div {\n"
+		style += self.TAB + "display: inline-block;\n"
+		style += self.TAB + "padding: 4px;\n"
+		style += self.TAB + "margin: 6px;\n"
+		style += "}\n\n"
+		return style
+
 	def generate_html(self, json_obj, parent, gparent):
 		html = ""
 		if isinstance(json_obj, dict):
@@ -196,7 +204,7 @@ class Generator:
 	def generate_htmlcss(self, output_html=None, output_css=None):
 		if not self.template['root']['display']:
 			html_out = Utils.add_eol(self.generate_html(self.input, "root", ""))
-			css_out = self.generate_css(self.template, "root", "")
+			css_out = self.generate_default_css() + self.generate_css(self.template, "root", "")
 			if output_html:
 				with open(Utils.full_path(output_html[0]), "w") as fp:
 					fp.write(html_out)

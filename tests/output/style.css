@@ -1,3 +1,9 @@
+div {
+  display: inline-block;
+  padding: 4px;
+  margin: 6px;
+}
+
 .Players {
   background-color: #00bbbb;
   color: #cccccc;
@@ -25,8 +31,8 @@
 }
 
 .Players_title{
-  background-color: #ffffff;
   color: #000000;
   border-radius: 5px;
+  background-color: #ffffff;
 }
 
