@@ -4,6 +4,12 @@ div {
   margin: 6px;
 }
 
+.block__border {
+  border-style: solid
+  border-width: 2px
+  border-color: black
+}
+
 .Players {
   background-color: #00bbbb;
   color: #cccccc;
@@ -32,7 +38,7 @@ div {
 
 .Players_title{
   color: #000000;
-  border-radius: 5px;
   background-color: #ffffff;
+  border-radius: 5px;
 }
 

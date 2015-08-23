@@ -173,6 +173,18 @@ class Generator:
 		style += self.TAB + "padding: 4px;\n"
 		style += self.TAB + "margin: 6px;\n"
 		style += "}\n\n"
+		if "block-border" in self.template['root']:
+			style += ".block__border {\n"
+			if "border-style" in self.template['root']['block-border']:
+				style += self.TAB + "border-style: {}\n".format(
+					self.template['root']['block-border']['border-style'])
+			if "border-width" in self.template['root']['block-border']:
+				style += self.TAB + "border-width: {}\n".format(
+					self.template['root']['block-border']['border-width'])
+			if "border-color" in self.template['root']['block-border']:
+				style += self.TAB + "border-color: {}\n".format(
+					self.template['root']['block-border']['border-color'])
+			style += "}\n\n"
 		return style
 
 	def generate_html(self, json_obj, parent, gparent):
@@ -183,7 +195,7 @@ class Generator:
 					if parent == "root":
 						html += '<div class="{}">'.format(key)
 					else:
-						html += '<div id="{}__{}">'.format(parent, key)
+						html += '<div class="block__border" id="{}__{}">'.format(parent, key)
 					# check if this is a title
 					if parent != "root":
 						html += '<center><div class="{}_title">{}</div></center>'.format(parent, key)
