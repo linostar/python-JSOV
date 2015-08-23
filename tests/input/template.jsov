@@ -1,7 +1,7 @@
 root: 
   display: false
   children:
-    - players:
+    - Players:
         cascading: vertical
         bgcolor: "#00bbbb"
         fgcolor: "#cccccc"

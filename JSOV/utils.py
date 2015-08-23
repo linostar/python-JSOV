@@ -2,19 +2,38 @@ import os
 import re
 
 class Utils:
+	children_attributes = {
+	"bgcolor": r"^\#[0-9a-f]{1,6}$",
+	"fgcolor": r"^\#[0-9a-f]{1,6}$",
+	"rounded-corners": r"^\d+$",
+	"cascading": r"^(vertical|horizontal|tabular)$",
+	"title": "",
+	"default-child": "",
+	"children": "",
+	}
+
 	@staticmethod
 	def lower_keys(dic):
 		new_dic = {}
 		for key, val in dic.items():
 			if isinstance(dic[key], dict):
-				new_dic[str(key).lower()] = Utils.lower_keys(dic[key])
+				if str(key).lower() in list(Utils.children_attributes):
+					new_dic[str(key).lower()] = Utils.lower_keys(dic[key])
+				else:
+					new_dic[str(key)] = Utils.lower_keys(dic[key])
 			elif isinstance(dic[key], list):
 				dic_list = []
 				for item in dic[key]:
 					dic_list.append(Utils.lower_keys(item))
-				new_dic[str(key).lower()] = dic_list
+				if str(key).lower() in list(Utils.children_attributes):
+					new_dic[str(key).lower()] = dic_list
+				else:
+					new_dic[str(key)] = dic_list
 			else:
-				new_dic[str(key).lower()] = val
+				if str(key).lower() in list(Utils.children_attributes):
+					new_dic[str(key).lower()] = val
+				else:
+					new_dic[str(key)] = val
 		return new_dic
 
 	@staticmethod

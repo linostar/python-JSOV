@@ -12,15 +12,6 @@ from .utils import Utils
 
 class Generator:
 	TAB = "  "
-	children_attributes = {
-	"bgcolor": r"^\#[0-9a-f]{1,6}$",
-	"fgcolor": r"^\#[0-9a-f]{1,6}$",
-	"rounded-corners": r"^\d+$",
-	"cascading": r"^(vertical|horizontal|tabular)$",
-	"title": "",
-	"default-child": "",
-	"children": "",
-	}
 
 	def __init__(self, jsonfile, jsovfile):
 		dpath.options.ALLOW_EMPTY_STRING_KEYS = True
@@ -60,7 +51,7 @@ class Generator:
 	def check_jsov_children(self, child):
 		res = True
 		for param in list(child.values())[0].keys():
-			if param not in self.children_attributes.keys():
+			if param not in Utils.children_attributes.keys():
 				print("Error: '{}' is not a recognized attribute.".format(param))
 				return False
 			if param == "children":
@@ -77,7 +68,7 @@ class Generator:
 
 	def check_jsov_special(self, special):
 		for key in special.keys():
-			if key not in self.children_attributes.keys():
+			if key not in Utils.children_attributes.keys():
 				print("Error: '{}' is not a recognized attribute.".format(key))
 				return False
 		return True
@@ -89,13 +80,13 @@ class Generator:
 				res &= self.parse_jsov_attributes(item)
 		if isinstance(element, dict):
 			for key in element.keys():
-				if key in self.children_attributes:
-					if not self.children_attributes[key] and not (isinstance(element[key], dict) \
+				if key in Utils.children_attributes:
+					if not Utils.children_attributes[key] and not (isinstance(element[key], dict) \
 						or isinstance(element[key], list)):
 						print("Error: element '{}' must be a JSOV object.".format(key))
 						return False
 					if isinstance(element[key], str):
-						if not re.match(self.children_attributes[key], element[key], re.IGNORECASE):
+						if not re.match(Utils.children_attributes[key], element[key], re.IGNORECASE):
 							print("Error: attribute '{}' has an unaccepted value: '{}'."
 								.format(key, element[key]))
 							return False
