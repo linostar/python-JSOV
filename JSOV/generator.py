@@ -184,6 +184,9 @@ class Generator:
 			if "border-color" in self.template['root']['block-border']:
 				style += self.TAB + "border-color: {};\n".format(
 					self.template['root']['block-border']['border-color'])
+			if "rounded-corners" in self.template['root']['block-border']:
+				style += self.TAB + "border-radius: {};\n".format(
+					self.template['root']['block-border']['rounded-corners'])
 			style += "}\n\n"
 		return style
 

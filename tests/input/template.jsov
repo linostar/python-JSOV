@@ -2,8 +2,9 @@ root:
   display: false
   block-border:
     border-style: solid
-    border-width: 1px
-    border-color: black
+    border-width: 2px
+    border-color: "#00206a"
+    rounded-corners: 5px
   children:
     - Players:
         cascading: vertical

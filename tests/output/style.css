@@ -6,8 +6,9 @@ div {
 
 .block__border {
   border-style: solid;
-  border-width: 1px;
-  border-color: black;
+  border-width: 2px;
+  border-color: #00206a;
+  border-radius: 5px;
 }
 
 .Players {
@@ -37,8 +38,8 @@ div {
 }
 
 .Players_title{
+  background-color: #ffffff;
   color: #000000;
   border-radius: 5px;
-  background-color: #ffffff;
 }
 
