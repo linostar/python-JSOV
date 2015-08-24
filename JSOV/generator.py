@@ -173,6 +173,19 @@ class Generator:
 		style += self.TAB + "padding: 4px;\n"
 		style += self.TAB + "margin: 6px;\n"
 		style += "}\n\n"
+		style += ".jsov__table {\n"
+		style += self.TAB + "border-collapse: collapse;\n"
+		style += "}\n\n"
+		style += ".jsov__tr {\n"
+		bgcolor = "black"
+		if "block-border" in self.template['root']:
+			if "bgcolor" in self.template['root']['block-border']:
+				bgcolor = self.template['root']['block-border']['bgcolor']
+		style += self.TAB + "border-bottom: 8px solid {};\n".format(bgcolor)
+		style += "}\n\n"
+		style += ".jsov__td {\n"
+		style += self.TAB + "padding: 4px;\n"
+		style += "}\n\n"
 		if "block-border" in self.template['root']:
 			style += ".block__border {\n"
 			if "border-style" in self.template['root']['block-border']:
@@ -204,20 +217,24 @@ class Generator:
 						html += '<div class="block__border" id="{}__{}">'.format(parent, key)
 					# check if this is a title
 					if parent != "root":
-						html += '<center><div class="{}_title">{}</div></center>'.format(parent, key)
+						html += '<table class="jsov__table">'
+						html += '<tr class="jsov__tr"><td colspan="2" class="{}_title" align="center">{}</td></tr>'.format(
+							parent, key)
 					else:
 						gparent = key
 					html += str(self.generate_html(json_obj[key], key, gparent))
 					html += '</div>'
 				else:
 					html += str(self.generate_html(json_obj[key], key, gparent))
+			html += '</table>'
 			return html
 		else:
 			if not gparent:
 				key2 = parent
 			else:
 				key2 = gparent + "__" + parent
-			return '<div class="{}">{}: {}</div><br/>'.format(key2, parent, json_obj)
+			return '<tr class="jsov__tr {}"><td class="jsov__td">{}: </td><td class="jsov__td">{}</td></tr>'.format(
+				key2, parent, json_obj)
 
 	def generate_htmlcss(self, output_html=None, output_css=None):
 		if not self.template['root']['display']:

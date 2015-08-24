@@ -4,6 +4,18 @@ div {
   margin: 6px;
 }
 
+.jsov__table {
+  border-collapse: collapse;
+}
+
+.jsov__tr {
+  border-bottom: 8px solid #00206a;
+}
+
+.jsov__td {
+  padding: 4px;
+}
+
 .block__border {
   border-style: solid;
   border-width: 2px;
@@ -39,8 +51,8 @@ div {
 }
 
 .Players_title{
-  color: #000000;
   border-radius: 5px;
+  color: #000000;
   background-color: #ffffff;
 }
 
