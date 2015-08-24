@@ -1,18 +1,18 @@
-div {
+.jsov_div {
   display: inline-block;
   padding: 4px;
   margin: 6px;
 }
 
-.jsov__table {
+.jsov_table {
   border-collapse: collapse;
 }
 
-.jsov__tr {
+.jsov_tr {
   border-bottom: 8px solid #00206a;
 }
 
-.jsov__td {
+.jsov_td {
   padding: 4px;
 }
 
@@ -51,8 +51,8 @@ div {
 }
 
 .Players_title{
-  border-radius: 5px;
-  color: #000000;
   background-color: #ffffff;
+  color: #000000;
+  border-radius: 5px;
 }
 
