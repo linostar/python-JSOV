@@ -1,5 +1,6 @@
 import os
 import re
+from collections import OrderedDict
 
 class Utils:
 	children_attributes = {
@@ -14,7 +15,7 @@ class Utils:
 
 	@staticmethod
 	def lower_keys(dic):
-		new_dic = {}
+		new_dic = OrderedDict()
 		for key, val in dic.items():
 			if isinstance(dic[key], dict):
 				if str(key).lower() in list(Utils.children_attributes):

@@ -1,6 +1,7 @@
 import os
 import json
 import re
+from collections import OrderedDict
 from itertools import islice
 
 import yaml
@@ -27,7 +28,7 @@ class Generator:
 			print("Error: template '{}' could not be found.".format(self.jsovfile))
 			sys.exit(1)
 		with open(self.jsonfile, "r") as json_fp:
-			self.input = Utils.lower_keys(json.load(json_fp))
+			self.input = Utils.lower_keys(json.load(json_fp, object_pairs_hook=OrderedDict))
 		with open(self.jsovfile, "r") as jsov_fp:
 			self.template = Utils.lower_keys(yaml.load(jsov_fp))
 
