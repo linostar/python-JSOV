@@ -203,6 +203,9 @@ class Generator:
 			if "bgcolor" in self.template['root']['block-border']:
 				style += self.TAB + "background-color: {};\n".format(
 					self.template['root']['block-border']['bgcolor'])
+			if "internal-spacing" in self.template['root']['block-border']:
+				style += self.TAB + "padding: {};\n".format(
+					self.template['root']['block-border']['internal-spacing'])
 			style += "}\n\n"
 		return style
 

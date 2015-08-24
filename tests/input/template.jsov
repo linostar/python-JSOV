@@ -6,6 +6,7 @@ root:
     border-color: "#ffffff"
     rounded-corners: 5px
     bgcolor: "#00206a"
+    internal-spacing: 8px
   children:
     - Players:
         cascading: vertical
