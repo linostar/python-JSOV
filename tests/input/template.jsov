@@ -25,6 +25,6 @@ root:
           - MP:
               bgcolor: "#6600dd"
           - Bonus:
-              bgcolor: "#dddd00"
+              bgcolor: "#bbbb00"
           - Score:
               bgcolor: "#dd0000"
