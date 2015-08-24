@@ -6,11 +6,16 @@ class Utils:
 	children_attributes = {
 	"bgcolor": r"^\#[0-9a-f]{1,6}$",
 	"fgcolor": r"^\#[0-9a-f]{1,6}$",
-	"rounded-corners": r"^\d+$",
+	"rounded-corners": r"^\d+.*$",
 	"cascading": r"^(vertical|horizontal|tabular)$",
+	"link": r".+",
+	"image-url": r".+",
+	"image-width": r"^\d+.*$",
+	"image-height": r"^\d+.*$",
 	"title": "",
 	"default-child": "",
 	"children": "",
+	"block-border": "",
 	}
 
 	@staticmethod
