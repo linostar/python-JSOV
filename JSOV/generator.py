@@ -187,6 +187,11 @@ class Generator:
 		style += ".jsov_td {\n"
 		style += self.TAB + "padding: 4px;\n"
 		style += "}\n\n"
+		style += ".jsov_linkbox a {\n"
+		style += self.TAB + "width: 100%;\n"
+		style += self.TAB + "height: 100%;\n"
+		style += self.TAB + "display: block;\n"
+		style += "}\n\n"
 		if "block-border" in self.template['root']:
 			style += ".block__border {\n"
 			if "border-style" in self.template['root']['block-border']:
@@ -224,9 +229,10 @@ class Generator:
 						html += '<table class="jsov_table">'
 						if "link" in self.template['root']['children'][0][parent]['title']:
 							link = self.template['root']['children'][0][parent]['title']['link']
-							link = link.replace("{this}", key)
-							html += ('<tr class="jsov_tr"><a href="{}"><td colspan="2" class="{}_title" ' +
-								'align="center">{}</td></a></tr>').format(link, parent, key)
+							link = link.replace("{this}", key).replace("{parent}", parent)
+							html += ('<tr class="jsov_tr"><td colspan="2" class="{}_title" align="center">' +
+								'<div class="jsov_linkbox"><a href="{}">{}</a></div></td></tr>').format(
+								link, parent, key)
 						else:
 							html += ('<tr class="jsov_tr"><td colspan="2" class="{}_title" ' +
 								'align="center">{}</td></tr>').format(parent, key)
