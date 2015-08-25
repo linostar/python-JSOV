@@ -23,6 +23,7 @@ root:
         children:
           - HP:
               bgcolor: "#00dd00"
+              link: "Players/{parent}/HP"
           - MP:
               bgcolor: "#6600dd"
           - Bonus:

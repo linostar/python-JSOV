@@ -252,8 +252,15 @@ class Generator:
 				key2 = parent
 			else:
 				key2 = gparent + "__" + parent
-			return '<tr class="jsov_tr {}"><td class="jsov_td">{}: </td><td class="jsov_td">{}</td></tr>'.format(
-				key2, parent, json_obj)
+			if "link" in self.template['root']['children'][0][gparent]['children'][0][parent]:
+				link = self.template['root']['children'][0][gparent]['children'][0][parent]['link']
+				link = link.replace("{this}", json_obj).replace("{parent}", parent)
+				element_html = ('<tr class="jsov_tr {key2}"><td class="jsov_td">{parent}: </td><td class="jsov_td"><div class="jsov_linkbox">' +
+				'<a href="{link}">{json_obj}</a></div></td></tr>').format(key2=key2, parent=parent, json_obj=json_obj, link=link)
+			else:
+				element_html = '<tr class="jsov_tr {key2}"><td class="jsov_td">{parent}: </td><td class="jsov_td">{json_obj}</td></tr>'.format(
+				key2=key2, parent=parent, json_obj=json_obj)
+			return element_html
 
 	def generate_htmlcss(self, output_html=None, output_css=None):
 		if not self.template['root']['display']:
