@@ -252,8 +252,9 @@ class Generator:
 			if "link" in self.template['root']['children'][gparent]['children'][parent]:
 				link = self.template['root']['children'][gparent]['children'][parent]['link']
 				link = link.replace("{this}", str(json_obj)).replace("{parent}", str(parent))
-				element_html = ('<tr class="jsov_tr {key2}"><td class="jsov_td">{parent}: </td><td class="jsov_td"><div class="jsov_linkbox">' +
-				'<a href="{link}">{json_obj}</a></div></td></tr>').format(key2=key2, parent=parent, json_obj=json_obj, link=link)
+				element_html = ('<tr class="jsov_tr {key2}"><td class="jsov_td"><div class="jsov_linkbox"><a href="{link}">{parent}: </a></div>' +
+					'</td><td class="jsov_td"><div class="jsov_linkbox"><a href="{link}">{json_obj}</a></div></td></tr>').format(
+					key2=key2, parent=parent, json_obj=json_obj, link=link)
 			else:
 				element_html = '<tr class="jsov_tr {key2}"><td class="jsov_td">{parent}: </td><td class="jsov_td">{json_obj}</td></tr>'.format(
 				key2=key2, parent=parent, json_obj=json_obj)
