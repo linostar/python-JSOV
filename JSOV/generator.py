@@ -214,7 +214,7 @@ class Generator:
 			style += "}\n\n"
 		return style
 
-	def generate_html(self, json_obj, parent, gparent):
+	def generate_html(self, json_obj, parent, gparent, mparent):
 		html = ""
 		if isinstance(json_obj, dict):
 			for key in json_obj:
@@ -237,12 +237,12 @@ class Generator:
 								'align="center">{}</td></tr>').format(parent, key)
 					else:
 						gparent = key
-					html += str(self.generate_html(json_obj[key], key, gparent))
+					html += str(self.generate_html(json_obj[key], key, gparent, parent))
 					if parent != "root":
 						html += '</table>'
 					html += '</div>'
 				else:
-					html += str(self.generate_html(json_obj[key], key, gparent))
+					html += str(self.generate_html(json_obj[key], key, gparent, parent))
 			return html
 		else:
 			if not gparent:
@@ -251,7 +251,7 @@ class Generator:
 				key2 = gparent + "__" + parent
 			if "link" in self.template['root']['children'][gparent]['children'][parent]:
 				link = self.template['root']['children'][gparent]['children'][parent]['link']
-				link = link.replace("{this}", str(json_obj)).replace("{parent}", str(parent))
+				link = link.replace("{this}", str(parent)).replace("{parent}", str(mparent))
 				element_html = ('<tr class="jsov_tr {key2}"><td class="jsov_td"><div class="jsov_linkbox"><a href="{link}">{parent}: </a></div>' +
 					'</td><td class="jsov_td"><div class="jsov_linkbox"><a href="{link}">{json_obj}</a></div></td></tr>').format(
 					key2=key2, parent=parent, json_obj=json_obj, link=link)
@@ -262,7 +262,7 @@ class Generator:
 
 	def generate_htmlcss(self, output_html=None, output_css=None):
 		if not self.template['root']['display']:
-			html_out = Utils.add_eol(self.generate_html(self.input, "root", ""))
+			html_out = Utils.add_eol(self.generate_html(self.input, "root", "", ""))
 			css_out = self.generate_default_css() + self.generate_css(self.template, "root", "")
 			if output_html:
 				with open(Utils.full_path(output_html[0]), "w") as fp:
