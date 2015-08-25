@@ -191,6 +191,8 @@ class Generator:
 		style += self.TAB + "width: 100%;\n"
 		style += self.TAB + "height: 100%;\n"
 		style += self.TAB + "display: block;\n"
+		style += self.TAB + "text-decoration: none;\n"
+		style += self.TAB + "color: inherit;\n"
 		style += "}\n\n"
 		if "block-border" in self.template['root']:
 			style += ".block__border {\n"

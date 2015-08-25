@@ -20,6 +20,8 @@
   width: 100%;
   height: 100%;
   display: block;
+  text-decoration: none;
+  color: inherit;
 }
 
 .block__border {
@@ -58,8 +60,8 @@
 }
 
 .Players_title{
+  border-radius: 5px;
   color: #000000;
   background-color: #ffffff;
-  border-radius: 5px;
 }
 
