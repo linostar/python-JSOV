@@ -230,9 +230,9 @@ class Generator:
 						if "link" in self.template['root']['children'][0][parent]['title']:
 							link = self.template['root']['children'][0][parent]['title']['link']
 							link = link.replace("{this}", key).replace("{parent}", parent)
-							html += ('<tr class="jsov_tr"><td colspan="2" class="{}_title" align="center">' +
-								'<div class="jsov_linkbox"><a href="{}">{}</a></div></td></tr>').format(
-								link, parent, key)
+							html += ('<tr class="jsov_tr"><td colspan="2" class="{parent}_title" align="center">' +
+								'<div class="jsov_linkbox"><a href="{link}">{key}</a></div></td></tr>').format(
+								link=link, parent=parent, key=key)
 						else:
 							html += ('<tr class="jsov_tr"><td colspan="2" class="{}_title" ' +
 								'align="center">{}</td></tr>').format(parent, key)
