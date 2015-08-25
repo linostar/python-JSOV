@@ -222,8 +222,14 @@ class Generator:
 					# check if this is a title
 					if parent != "root":
 						html += '<table class="jsov_table">'
-						html += '<tr class="jsov_tr"><td colspan="2" class="{}_title" align="center">{}</td></tr>'.format(
-							parent, key)
+						if "link" in self.template['root']['children'][0][parent]['title']:
+							link = self.template['root']['children'][0][parent]['title']['link']
+							link = link.replace("{this}", key)
+							html += ('<tr class="jsov_tr"><a href="{}"><td colspan="2" class="{}_title" ' +
+								'align="center">{}</td></a></tr>').format(link, parent, key)
+						else:
+							html += ('<tr class="jsov_tr"><td colspan="2" class="{}_title" ' +
+								'align="center">{}</td></tr>').format(parent, key)
 					else:
 						gparent = key
 					html += str(self.generate_html(json_obj[key], key, gparent))

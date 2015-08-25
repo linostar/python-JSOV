@@ -17,6 +17,7 @@ root:
           bgcolor: "#ffffff"
           fgcolor: "#000000"
           rounded-corners: 5px
+          link: "players/{this}.html"
         default-child:
           fgcolor: "#ffffff"
         children:
