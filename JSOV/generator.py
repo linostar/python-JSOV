@@ -119,10 +119,7 @@ class Generator:
 		try:
 			children = dpath.util.get(jsov, "/" + node + "/children")
 			has_dc = self.has_defaultchild(jsov, node)
-			# if not isinstance(children, list):
-			# 	children = [children]
 			for key in children:
-				# key = list(islice(child, 1))[0]
 				if parent:
 					style += "." + str(parent) + "__" + str(key) + " {\n"
 				else:
@@ -143,7 +140,7 @@ class Generator:
 						elif attribute == "rounded-corners":
 							style += self.TAB + "border-radius: " + str(value) + ";\n"
 				style += "}\n\n"
-			return style + self.generate_css(children[key], key, key) + self.generate_css_title(children[key], key, key)
+			return style + self.generate_css(children, key, key) + self.generate_css_title(children, key, key)
 		except KeyError:
 			return ""
 
