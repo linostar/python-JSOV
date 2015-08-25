@@ -119,20 +119,20 @@ class Generator:
 		try:
 			children = dpath.util.get(jsov, "/" + node + "/children")
 			has_dc = self.has_defaultchild(jsov, node)
-			if not isinstance(children, list):
-				children = [children]
-			for child in children:
-				key = list(islice(child, 1))[0]
+			# if not isinstance(children, list):
+			# 	children = [children]
+			for key in children:
+				# key = list(islice(child, 1))[0]
 				if parent:
 					style += "." + str(parent) + "__" + str(key) + " {\n"
 				else:
 					style += "." + str(key) + " {\n"
-				if "bgcolor" in child[key]:
-					style += self.TAB + "background-color: " + str(child[key]['bgcolor']) + ";\n"
-				if "fgcolor" in child[key]:
-					style += self.TAB + "color: " + str(child[key]['fgcolor']) + ";\n"
-				if "rounded-corners" in child[key]:
-					style += self.TAB + "border-radius: " + str(child[key]['rounded-corners']) + ";\n"
+				if "bgcolor" in children[key]:
+					style += self.TAB + "background-color: " + str(children[key]['bgcolor']) + ";\n"
+				if "fgcolor" in children[key]:
+					style += self.TAB + "color: " + str(children[key]['fgcolor']) + ";\n"
+				if "rounded-corners" in children[key]:
+					style += self.TAB + "border-radius: " + str(children[key]['rounded-corners']) + ";\n"
 				# add default-child attributes to each of the children
 				if has_dc:
 					for attribute, value in has_dc.items():
@@ -143,7 +143,7 @@ class Generator:
 						elif attribute == "rounded-corners":
 							style += self.TAB + "border-radius: " + str(value) + ";\n"
 				style += "}\n\n"
-			return style + self.generate_css(child, key, key) + self.generate_css_title(child, key, key)
+			return style + self.generate_css(children[key], key, key) + self.generate_css_title(children[key], key, key)
 		except KeyError:
 			return ""
 
@@ -153,7 +153,7 @@ class Generator:
 		try:
 			title = dpath.util.get(jsov, "/" + node + "/title")
 			if parent:
-				style += "." + str(parent) + "_title" + "{\n"
+				style += "." + str(parent) + "_title" + " {\n"
 			else:
 				style += "." + "root_title" + " {\n"
 			for attribute, value in title.items():
@@ -229,9 +229,9 @@ class Generator:
 					# check if this is a title
 					if parent != "root":
 						html += '<table class="jsov_table">'
-						if "link" in self.template['root']['children'][0][parent]['title']:
-							link = self.template['root']['children'][0][parent]['title']['link']
-							link = link.replace("{this}", key).replace("{parent}", parent)
+						if "link" in self.template['root']['children'][parent]['title']:
+							link = self.template['root']['children'][parent]['title']['link']
+							link = link.replace("{this}", str(key)).replace("{parent}", str(parent))
 							html += ('<tr class="jsov_tr"><td colspan="2" class="{parent}_title" align="center">' +
 								'<div class="jsov_linkbox"><a href="{link}">{key}</a></div></td></tr>').format(
 								link=link, parent=parent, key=key)
@@ -252,9 +252,9 @@ class Generator:
 				key2 = parent
 			else:
 				key2 = gparent + "__" + parent
-			if "link" in self.template['root']['children'][0][gparent]['children'][0][parent]:
-				link = self.template['root']['children'][0][gparent]['children'][0][parent]['link']
-				link = link.replace("{this}", json_obj).replace("{parent}", parent)
+			if "link" in self.template['root']['children'][gparent]['children'][parent]:
+				link = self.template['root']['children'][gparent]['children'][parent]['link']
+				link = link.replace("{this}", str(json_obj)).replace("{parent}", str(parent))
 				element_html = ('<tr class="jsov_tr {key2}"><td class="jsov_td">{parent}: </td><td class="jsov_td"><div class="jsov_linkbox">' +
 				'<a href="{link}">{json_obj}</a></div></td></tr>').format(key2=key2, parent=parent, json_obj=json_obj, link=link)
 			else:

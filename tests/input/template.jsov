@@ -8,25 +8,25 @@ root:
     bgcolor: "#00206a"
     internal-spacing: 8px
   children:
-    - Players:
-        cascading: vertical
-        bgcolor: "#00bbbb"
-        fgcolor: "#cccccc"
+    Players:
+      cascading: vertical
+      bgcolor: "#00bbbb"
+      fgcolor: "#cccccc"
+      rounded-corners: 5px
+      title:
+        bgcolor: "#ffffff"
+        fgcolor: "#000000"
         rounded-corners: 5px
-        title:
-          bgcolor: "#ffffff"
-          fgcolor: "#000000"
-          rounded-corners: 5px
-          link: "{parent}/{this}.html"
-        default-child:
-          fgcolor: "#ffffff"
-        children:
-          - HP:
-              bgcolor: "#00dd00"
-              link: "Players/{parent}/HP"
-          - MP:
-              bgcolor: "#6600dd"
-          - Bonus:
-              bgcolor: "#bbbb00"
-          - Score:
-              bgcolor: "#dd0000"
+        link: "{parent}/{this}.html"
+      default-child:
+        fgcolor: "#ffffff"
+      children:
+        HP:
+          bgcolor: "#00dd00"
+          link: "Players/{parent}/HP"
+        MP:
+          bgcolor: "#6600dd"
+        Bonus:
+          bgcolor: "#bbbb00"
+        Score:
+          bgcolor: "#dd0000"
