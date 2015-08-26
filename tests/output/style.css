@@ -49,19 +49,19 @@
   color: #ffffff;
 }
 
-.Players__Bonus {
-  background-color: #bbbb00;
-  color: #ffffff;
-}
-
 .Players__MP {
   background-color: #6600dd;
   color: #ffffff;
 }
 
+.Players__Bonus {
+  background-color: #bbbb00;
+  color: #ffffff;
+}
+
 .Players_title {
-  color: #000000;
   background-color: #ffffff;
+  color: #000000;
   border-radius: 5px;
 }
 

@@ -13,6 +13,9 @@ root:
       bgcolor: "#00bbbb"
       fgcolor: "#cccccc"
       rounded-corners: 5px
+      image-url: "{parent}_avatars/{this}.png"
+      image-width: 200px
+      image-height: 200px
       title:
         bgcolor: "#ffffff"
         fgcolor: "#000000"
