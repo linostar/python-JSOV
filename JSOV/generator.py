@@ -236,8 +236,8 @@ class Generator:
 							html += ('<tr class="jsov_tr"><td colspan="2" class="{}_title" ' +
 								'align="center">{}</td></tr>').format(parent, key)
 						if "image-url" in self.template['root']['children'][parent]:
-							width = "100px"
-							height = "100px"
+							width = Utils.DEFAULT_IMAGE_WIDTH
+							height = Utils.DEFAULT_IMAGE_HEIGHT
 							if "image-width" in self.template['root']['children'][parent]:
 								image_source = self.template['root']['children'][parent]['image-url']
 								image_source = image_source.replace("{this}", str(key)).replace("{parent}", str(parent))

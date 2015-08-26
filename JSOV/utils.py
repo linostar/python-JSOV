@@ -3,6 +3,9 @@ import re
 from collections import OrderedDict
 
 class Utils:
+	DEFAULT_IMAGE_WIDTH = "100"
+	DEFAULT_IMAGE_HEIGHT = "100"
+
 	children_attributes = {
 	"bgcolor": r"^\#[0-9a-f]{1,6}$",
 	"fgcolor": r"^\#[0-9a-f]{1,6}$",
