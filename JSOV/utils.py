@@ -2,6 +2,9 @@ import os
 import re
 from collections import OrderedDict
 
+import cssutils
+
+
 class Utils:
 	DEFAULT_IMAGE_WIDTH = "100"
 	DEFAULT_IMAGE_HEIGHT = "100"
@@ -63,3 +66,17 @@ class Utils:
 	def add_eol(string):
 		new_string = re.sub(r"><", r">\n<", string)
 		return new_string + "\n"
+
+	@staticmethod
+	def compare_css_outputs(css1, css2):
+		css_dicts = [{}, {}]
+		i = 0
+		for css in (css1, css2):
+			sheet = cssutils.parseString(css)
+			for rule in sheet:
+				selector = rule.selectorText
+				style = rule.style.cssText
+				style_list = sorted(style.split(";\n"))
+				css_dicts[i][selector] = style_list
+			i += 1
+		return css_dicts[0] == css_dicts[1]
