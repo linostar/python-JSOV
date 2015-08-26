@@ -7,7 +7,7 @@ class Utils:
 	"bgcolor": r"^\#[0-9a-f]{1,6}$",
 	"fgcolor": r"^\#[0-9a-f]{1,6}$",
 	"rounded-corners": r"^\d+.*$",
-	"cascading": r"^(vertical|horizontal|tabular)$",
+	"cascading": r"^(vertical|horizontal)$",
 	"link": r".+",
 	"image-url": r".+",
 	"image-width": r"^\d+.*$",

@@ -241,6 +241,9 @@ class Generator:
 					if parent != "root":
 						html += '</table>'
 					html += '</div>'
+					if "cascading" in self.template['root']:
+						if self.template['root']['cascading'] == "vertical":
+							html += "<br/>"
 				else:
 					html += str(self.generate_html(json_obj[key], key, gparent, parent))
 			return html
