@@ -39,13 +39,13 @@
   border-radius: 5px;
 }
 
-.Players__Score {
-  background-color: #dd0000;
+.Players__HP {
+  background-color: #00dd00;
   color: #ffffff;
 }
 
-.Players__HP {
-  background-color: #00dd00;
+.Players__Score {
+  background-color: #dd0000;
   color: #ffffff;
 }
 
@@ -60,8 +60,8 @@
 }
 
 .Players_title {
+  border-radius: 5px;
   background-color: #ffffff;
   color: #000000;
-  border-radius: 5px;
 }
 
