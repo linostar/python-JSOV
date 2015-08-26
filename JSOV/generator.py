@@ -235,6 +235,17 @@ class Generator:
 						else:
 							html += ('<tr class="jsov_tr"><td colspan="2" class="{}_title" ' +
 								'align="center">{}</td></tr>').format(parent, key)
+						if "image-url" in self.template['root']['children'][parent]:
+							width = "100px"
+							height = "100px"
+							if "image-width" in self.template['root']['children'][parent]:
+								image_source = self.template['root']['children'][parent]['image-url']
+								image_source = image_source.replace("{this}", str(key)).replace("{parent}", str(parent))
+								width = str(self.template['root']['children'][parent]['image-width'])
+							if "image-height" in self.template['root']['children'][parent]:
+								height = str(self.template['root']['children'][parent]['image-height'])
+							html += ('<tr class="jsov_tr"><td colspan="2" align="center">' +
+								'<img src="{}" width="{}" height="{}"/></td></tr>').format(image_source, width, height)
 					else:
 						gparent = key
 					html += str(self.generate_html(json_obj[key], key, gparent, parent))
