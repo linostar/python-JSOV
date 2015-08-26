@@ -39,13 +39,8 @@
   border-radius: 5px;
 }
 
-.Players__MP {
-  background-color: #6600dd;
-  color: #ffffff;
-}
-
-.Players__Bonus {
-  background-color: #bbbb00;
+.Players__Score {
+  background-color: #dd0000;
   color: #ffffff;
 }
 
@@ -54,14 +49,19 @@
   color: #ffffff;
 }
 
-.Players__Score {
-  background-color: #dd0000;
+.Players__Bonus {
+  background-color: #bbbb00;
+  color: #ffffff;
+}
+
+.Players__MP {
+  background-color: #6600dd;
   color: #ffffff;
 }
 
 .Players_title {
-  background-color: #ffffff;
   color: #000000;
+  background-color: #ffffff;
   border-radius: 5px;
 }
 

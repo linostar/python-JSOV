@@ -1,6 +1,6 @@
 root: 
   display: false
-  cascading: vertical
+  cascading: horizontal
   block-border:
     border-style: solid
     border-width: 2px
