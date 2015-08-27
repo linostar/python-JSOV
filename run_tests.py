@@ -16,6 +16,9 @@ class Run_Tests(unittest.TestCase):
 	def create_instance(self):
 		self.visualizer = generator.Generator(self.INPUT_JSON, self.INPUT_TEMPLATE)
 
+	def generate_no_custom(self):
+		self.visualizer.generate_htmlcss(self.GENERATED_HTML, self.GENERATED_CSS)
+
 	def test_input_json_exists(self):
 		self.assertTrue(os.path.exists(self.INPUT_JSON))
 
