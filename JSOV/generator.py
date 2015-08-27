@@ -18,7 +18,10 @@ class Generator:
 	def __init__(self, jsonfile, jsovfile):
 		dpath.options.ALLOW_EMPTY_STRING_KEYS = True
 		self.jsonfile = jsonfile
-		self.jsovfile = jsovfile[0]
+		if isinstance(jsovfile, list):
+			self.jsovfile = jsovfile[0]
+		else:
+			self.jsovfile = jsovfile
 		self.load_dicts()
 
 	def load_dicts(self):
