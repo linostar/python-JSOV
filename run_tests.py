@@ -36,6 +36,8 @@ class Run_Tests(unittest.TestCase):
 		self.assertTrue(os.path.exists(self.GENERATED_DIR))
 
 	def test_nocustom_match_html(self):
+		self.create_instance()
+		self.generate_nocustom()
 		with open(self.OUTPUT_HTML, "r") as f1:
 			out_html = f1.read()
 		with open(self.GENERATED_HTML, "r") as f2:
