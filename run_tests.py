@@ -51,7 +51,7 @@ class Run_Tests(unittest.TestCase):
 			out_css = f1.read()
 		with open(self.GENERATED_CSS, "r") as f2:
 			gen_css = f2.read()
-		self.assertTrue(out_css == gen_css)
+		self.assertTrue(Utils.compare_css_outputs(out_css, gen_css))
 
 
 if __name__ == "__main__":
