@@ -2,6 +2,7 @@ import os
 import unittest
 
 from JSOV import generator
+from JSOV.utils import Utils
 
 
 class Run_Tests(unittest.TestCase):
@@ -16,7 +17,7 @@ class Run_Tests(unittest.TestCase):
 	def create_instance(self):
 		self.visualizer = generator.Generator(self.INPUT_JSON, self.INPUT_TEMPLATE)
 
-	def generate_no_custom(self):
+	def generate_nocustom(self):
 		self.visualizer.generate_htmlcss(self.GENERATED_HTML, self.GENERATED_CSS)
 
 	def test_input_json_exists(self):
@@ -33,6 +34,13 @@ class Run_Tests(unittest.TestCase):
 
 	def test_generated_dir_exists(self):
 		self.assertTrue(os.path.exists(self.GENERATED_DIR))
+
+	def test_nocustom_match_html(self):
+		with open(self.OUTPUT_HTML, "r") as f1:
+			out_html = f1.read()
+		with open(self.GENERATED_HTML, "r") as f2:
+			gen_html = f2.read()
+		self.assertTrue(out_html == gen_html)
 
 
 if __name__ == "__main__":
