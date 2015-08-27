@@ -44,6 +44,15 @@ class Run_Tests(unittest.TestCase):
 			gen_html = f2.read()
 		self.assertTrue(out_html == gen_html)
 
+	def test_nocustom_match_css(self):
+		self.create_instance()
+		self.generate_nocustom()
+		with open(self.OUTPUT_CSS, "r") as f1:
+			out_css = f1.read()
+		with open(self.GENERATED_CSS, "r") as f2:
+			gen_css = f2.read()
+		self.assertTrue(out_css == gen_css)
+
 
 if __name__ == "__main__":
 	unittest.main()
