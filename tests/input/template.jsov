@@ -24,6 +24,8 @@ root:
       default-child:
         fgcolor: "#ffffff"
       children:
+        Type:
+          resource: image
         HP:
           bgcolor: "#00dd00"
           link: "{grandparent}/{parent}/{this}"
