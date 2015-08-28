@@ -269,6 +269,7 @@ class Generator:
 				key2 = gparent + "__" + parent
 			if "image-url" in self.template['root']['children'][gparent]['children'][parent]:
 				image_source = self.template['root']['children'][gparent]['children'][parent]['image-url']
+				image_source = image_source.replace("{this}", parent).replace("{grandparent}", gparent)
 				if "image-width" in self.template['root']['children'][gparent]['children'][parent]:
 					width = self.template['root']['children'][gparent]['children'][parent]['image-width']
 				else:

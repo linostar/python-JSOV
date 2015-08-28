@@ -29,7 +29,7 @@ root:
           link: "{grandparent}/{parent}/{this}"
         MP:
           bgcolor: "#6600dd"
-          image-url: "{this}.png"
+          image-url: "{grandparent}/{this}.png"
         Bonus:
           bgcolor: "#bbbb00"
         Score:
