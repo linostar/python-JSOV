@@ -272,12 +272,12 @@ class Generator:
 				if "image-width" in self.template['root']['children'][gparent]['children'][parent]:
 					width = self.template['root']['children'][gparent]['children'][parent]['image-width']
 				else:
-					width = Utils.DEFAULT_IMAGE_WIDTH // 2
+					width = str(int(Utils.DEFAULT_IMAGE_WIDTH) // 2)
 				if "image-height" in self.template['root']['children'][gparent]['children'][parent]:
 					height = self.template['root']['children'][gparent]['children'][parent]['image-height']
 				else:
-					height = Utils.DEFAULT_IMAGE_HEIGHT // 2
-				parent2 = '<img src="{}" width="{}" height="{}"/>'.format(image_source, width, height)
+					height = str(int(Utils.DEFAULT_IMAGE_HEIGHT) // 2)
+				parent2 = '<img src="{}" width="{}" height="{}" alt="{}"/>'.format(image_source, width, height, parent)
 			else:
 				parent2 = parent + ": "
 			if "link" in self.template['root']['children'][gparent]['children'][parent]:
