@@ -267,15 +267,28 @@ class Generator:
 				key2 = parent
 			else:
 				key2 = gparent + "__" + parent
+			if "image-url" in self.template['root']['children'][gparent]['children'][parent]:
+				image_source = self.template['root']['children'][gparent]['children'][parent]['image-url']
+				if "image-width" in self.template['root']['children'][gparent]['children'][parent]:
+					width = self.template['root']['children'][gparent]['children'][parent]['image-width']
+				else:
+					width = Utils.DEFAULT_IMAGE_WIDTH // 2
+				if "image-height" in self.template['root']['children'][gparent]['children'][parent]:
+					height = self.template['root']['children'][gparent]['children'][parent]['image-height']
+				else:
+					height = Utils.DEFAULT_IMAGE_HEIGHT // 2
+				parent2 = '<img src="{}" width="{}" height="{}"/>'.format(image_source, width, height)
+			else:
+				parent2 = parent + ": "
 			if "link" in self.template['root']['children'][gparent]['children'][parent]:
 				link = self.template['root']['children'][gparent]['children'][parent]['link']
 				link = link.replace("{this}", str(parent)).replace("{parent}", str(mparent)).replace("{grandparent}", str(gparent))
-				element_html = ('<tr class="jsov_tr {key2}"><td class="jsov_td"><div class="jsov_linkbox"><a href="{link}">{parent}: </a></div>' +
+				element_html = ('<tr class="jsov_tr {key2}"><td class="jsov_td"><div class="jsov_linkbox"><a href="{link}">{parent2}</a></div>' +
 					'</td><td class="jsov_td"><div class="jsov_linkbox"><a href="{link}">{json_obj}</a></div></td></tr>').format(
-					key2=key2, parent=parent, json_obj=json_obj, link=link)
+					key2=key2, parent2=parent2, json_obj=json_obj, link=link)
 			else:
-				element_html = '<tr class="jsov_tr {key2}"><td class="jsov_td">{parent}: </td><td class="jsov_td">{json_obj}</td></tr>'.format(
-				key2=key2, parent=parent, json_obj=json_obj)
+				element_html = '<tr class="jsov_tr {key2}"><td class="jsov_td">{parent2}</td><td class="jsov_td">{json_obj}</td></tr>'.format(
+				key2=key2, parent2=parent2, json_obj=json_obj)
 			return element_html
 
 	def generate_htmlcss(self, output_html=None, output_css=None):
