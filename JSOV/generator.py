@@ -119,14 +119,22 @@ class Generator:
 		for line in lines:
 			if line.startswith("{{for ") and line.endswith("}}"):
 				if i + 1 < len(lines):
-					html += self.parse_for("\n".join(lines[(i+1):]), json_obj, 1)
+					for_num = line[5:-2].strip()
+					if for_num.isdigit():
+						html += self.parse_for("\n".join(lines[(i+1):]), range(int(for_num)), 1)
+					else:
+						if for_num == "root":
+							html += self.parse_for("\n".join(lines[(i+1):]), json_obj, 1)
+						elif for_num.startswith("root.child"):
+							new_json_obj = json_obj[list(json_obj.keys())[0]]
+							if isinstance(new_json_obj, dict):
+								html += self.parse_for("\n".join(lines[(i+1):]), new_json_obj, 1)
 			elif line == "{{endfor}}":
 				if loop > 0:
-					if isinstance(json_obj[list(json_obj.keys())[0]], dict):
-						old_html = html
-						html = ""
-						for child in json_obj[list(json_obj.keys())[0]].keys():
-							html += old_html.replace("{root.child}", child)
+					old_html = html
+					html = ""
+					for child in json_obj[list(json_obj.keys())[0]].keys():
+						html += old_html.replace("{root.child}", child)
 				return html
 			else:
 				html += line
