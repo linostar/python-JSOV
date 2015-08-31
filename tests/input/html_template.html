@@ -11,14 +11,18 @@
 </head>
 <body>
 <div id="{root}">
+{{for root.child}}
 <div class="{root}_{root.child}">
 <div class="{root}_title">
 {root.child.key}
 </div>
+{{for root.child.child}}
 <div class="{root}_{root.child.child}">
 {root.child.child}: {root.child.child.value}
 </div>
+{{endfor root.child.child}}
 </div>
+{{endfor root.child}}
 </div>
 </body>
 </html>
