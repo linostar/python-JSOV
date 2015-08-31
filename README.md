@@ -26,4 +26,4 @@ Syntax: `./main.py -t template.jsov file.json`
 
 ### User-made custom templates
 
-Syntax: `./main.py --custom --html-template template.html file.json`
+Syntax: `./main.py --custom -t template.html file.json`
