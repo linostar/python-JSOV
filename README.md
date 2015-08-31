@@ -17,3 +17,13 @@ There are two ways to generate visual outputs, of JSON object(s) using python-JS
 ## Requirements
 
 Project requirements can be installed by running `pip3 install -r requirements.txt`
+
+## Examples of usage
+
+### JSOV templates
+
+Syntax: `./main.py -t template.jsov file.json`
+
+### User-made custom templates
+
+Syntax: `./main.py --custom --html-template template.html file.json`
