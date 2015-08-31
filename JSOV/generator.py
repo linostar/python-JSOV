@@ -112,15 +112,21 @@ class Generator:
 			html = fp_html.read()
 		return html
 
-	def parse_for(self, text, loop=0, json_obj=None):
+	def parse_for(self, text, json_obj, loop=0):
 		i = 0
 		html = ""
 		lines = [line.strip() for line in text.splitlines() if line.strip()]
 		for line in lines:
 			if line.startswith("{{for ") and line.endswith("}}"):
 				if i + 1 < len(lines):
-					self.parse_for("\n".join(lines[(i+1):]))
+					html += self.parse_for("\n".join(lines[(i+1):]), json_obj, 1)
 			elif line == "{{endfor}}":
+				if loop > 0:
+					if isinstance(json_obj[list(json_obj.keys())[0]], dict):
+						old_html = html
+						html = ""
+						for child in json_obj[list(json_obj.keys())[0]].keys():
+							html += old_html.replace("{root.child}", child)
 				return html
 			else:
 				html += line
