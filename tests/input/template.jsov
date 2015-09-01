@@ -1,5 +1,4 @@
 root: 
-  display: false
   cascading: horizontal
   block-border:
     border-style: solid

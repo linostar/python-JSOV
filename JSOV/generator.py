@@ -314,17 +314,16 @@ class Generator:
 			return element_html
 
 	def generate_htmlcss(self, output_html=None, output_css=None):
-		if not self.template['root']['display']:
-			html_out = Utils.add_eol(self.generate_html(self.input, "root", "", ""))
-			css_out = self.generate_default_css() + self.generate_css(self.template, "root", "")
-			if output_html:
-				if isinstance(output_html, list):
-					output_html = output_html[0]
-				with open(Utils.full_path(output_html), "w") as fp:
-					fp.write(html_out)
-			if output_css:
-				if isinstance(output_css, list):
-					output_css = output_css[0]
-				with open(Utils.full_path(output_css), "w") as fp:
-					fp.write(css_out)
-			return html_out, css_out
+		html_out = Utils.add_eol(self.generate_html(self.input, "root", "", ""))
+		css_out = self.generate_default_css() + self.generate_css(self.template, "root", "")
+		if output_html:
+			if isinstance(output_html, list):
+				output_html = output_html[0]
+			with open(Utils.full_path(output_html), "w") as fp:
+				fp.write(html_out)
+		if output_css:
+			if isinstance(output_css, list):
+				output_css = output_css[0]
+			with open(Utils.full_path(output_css), "w") as fp:
+				fp.write(css_out)
+		return html_out, css_out
