@@ -109,14 +109,6 @@ class Generator:
 		except KeyError:
 			return False
 
-	def read_html_template(self, html_template):
-		if not os.path.exists(html_template):
-			print("Error: HTML template '{}' could not be found.".format(html_template))
-			sys.exit(1)
-		with open(html_template, "r") as fp_html:
-			html = fp_html.read()
-		return html
-
 	def parse_for(self, text, json_obj, loop=0):
 		i = 0
 		html = ""
