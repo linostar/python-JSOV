@@ -15,16 +15,16 @@ from .utils import Utils
 class Generator:
 	TAB = "  "
 
-	def __init__(self, jsonfile, jsovfile):
+	def __init__(self, jsonfile, jsovfile, custom=False):
 		dpath.options.ALLOW_EMPTY_STRING_KEYS = True
 		self.jsonfile = jsonfile
 		if isinstance(jsovfile, list):
 			self.jsovfile = jsovfile[0]
 		else:
 			self.jsovfile = jsovfile
-		self.load_dicts()
+		self.load_dicts(custom)
 
-	def load_dicts(self):
+	def load_dicts(self, custom):
 		if not os.path.exists(self.jsonfile):
 			print("Error: inputfile '{}' could not be found.".format(self.jsonfile))
 			sys.exit(1)
@@ -34,7 +34,12 @@ class Generator:
 		with open(self.jsonfile, "r") as json_fp:
 			self.input = Utils.lower_keys(json.load(json_fp, object_pairs_hook=OrderedDict))
 		with open(self.jsovfile, "r") as jsov_fp:
-			self.template = Utils.lower_keys(yaml.load(jsov_fp))
+			if custom:
+				self.template = {}
+				self.custom_template = jsov_fp.read()
+			else:
+				self.custom_template = ""
+				self.template = Utils.lower_keys(yaml.load(jsov_fp))
 
 	def check_jsov(self):
 		if not "root" in self.template:

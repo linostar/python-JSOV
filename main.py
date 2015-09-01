@@ -23,7 +23,7 @@ def check_args(args):
 			print("Error: Option '--no-output' does not allow '--html-output' or '--css-output'.")
 			sys.exit(1)
 		# to be changed
-		visualizer = generator.Generator(args.inputfile, args.template)
+		visualizer = generator.Generator(args.inputfile, args.template, True)
 		html = visualizer.read_html_template(args.template)
 		if not args.no_output:
 			html_out = args.html_output if args.html_output else ["output.html"]
