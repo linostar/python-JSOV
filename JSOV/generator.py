@@ -288,6 +288,9 @@ class Generator:
 				key2 = parent
 			else:
 				key2 = gparent + "__" + parent
+			if "resource" in self.template['root']['children'][gparent]['children'][parent]:
+				if self.template['root']['children'][gparent]['children'][parent]['resource'] == 'image':
+					json_obj = '<img src="' + json_obj + '"/>'
 			if "image-url" in self.template['root']['children'][gparent]['children'][parent]:
 				image_source = self.template['root']['children'][gparent]['children'][parent]['image-url']
 				image_source = image_source.replace("{this}", parent).replace("{grandparent}", gparent)

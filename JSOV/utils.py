@@ -18,7 +18,7 @@ class Utils:
 	"image-url": r".+",
 	"image-width": r"^\d+.*$",
 	"image-height": r"^\d+.*$",
-	"resource": r"^image$",
+	"resource": r"^(image|text)$",
 	"title": "",
 	"default-child": "",
 	"children": "",
