@@ -27,6 +27,7 @@ class Utils:
 
 	@staticmethod
 	def lower_keys(dic):
+		"""convert all keys (and nested keys) in a dict to lower case, and sort them"""
 		new_dic = OrderedDict()
 		for key, val in dic.items():
 			if isinstance(dic[key], dict):
@@ -51,6 +52,7 @@ class Utils:
 
 	@staticmethod
 	def cap_first(string):
+		"""convert the first letter in a string to capital letter"""
 		if len(string) > 1:
 			return string[0].upper() + string[1:]
 		elif len(string):
@@ -60,16 +62,19 @@ class Utils:
 
 	@staticmethod
 	def full_path(path):
+		"""return the full path of a file/dir"""
 		fdir = os.path.dirname(os.path.dirname(__file__))
 		return os.path.join(fdir, path)
 
 	@staticmethod
 	def add_eol(string):
+		"""add end of lines between consecutive html tags"""
 		new_string = re.sub(r"><", r">\n<", string)
 		return new_string + "\n"
 
 	@staticmethod
 	def compare_css_outputs(css1, css2):
+		"""compare css styles after sorting them"""
 		css_dicts = [{}, {}]
 		i = 0
 		for css in (css1, css2):

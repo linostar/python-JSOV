@@ -25,6 +25,7 @@ class Generator:
 		self.load_dicts(custom)
 
 	def load_dicts(self, custom):
+		"""load the JSON and the JSOV/custom template in their respective objects"""
 		if not os.path.exists(self.jsonfile):
 			print("Error: inputfile '{}' could not be found.".format(self.jsonfile))
 			sys.exit(1)
@@ -42,6 +43,7 @@ class Generator:
 				self.template = Utils.lower_keys(yaml.load(jsov_fp))
 
 	def check_jsov(self):
+		"""check the top structure of a JSOV object"""
 		if not "root" in self.template:
 			print("Error: object 'root' is missing from the top.")
 			return False
@@ -57,6 +59,7 @@ class Generator:
 		return res
 
 	def check_jsov_children(self, child):
+		"""check attributes in JSOV children objects"""
 		res = True
 		for param in list(child.values())[0].keys():
 			if param not in Utils.children_attributes.keys():
@@ -75,6 +78,7 @@ class Generator:
 		return res
 
 	def check_jsov_special(self, special):
+		"""check for particular attributes in JSOV, like 'title' and 'default-child'"""
 		for key in special.keys():
 			if key not in Utils.children_attributes.keys():
 				print("Error: '{}' is not a recognized attribute.".format(key))
@@ -82,15 +86,12 @@ class Generator:
 		return True
 
 	def parse_jsov_attributes(self, element):
+		"""check if it's a proper JSOV object with proper attributes"""
 		res = True
-		if isinstance(element, list):
-			for item in element:
-				res &= self.parse_jsov_attributes(item)
 		if isinstance(element, dict):
 			for key in element.keys():
 				if key in Utils.children_attributes:
-					if not Utils.children_attributes[key] and not (isinstance(element[key], dict) \
-						or isinstance(element[key], list)):
+					if not Utils.children_attributes[key] and not isinstance(element[key], dict):
 						print("Error: element '{}' must be a JSOV object.".format(key))
 						return False
 					if isinstance(element[key], str):
@@ -98,11 +99,12 @@ class Generator:
 							print("Error: attribute '{}' has an unaccepted value: '{}'."
 								.format(key, element[key]))
 							return False
-				if isinstance(element[key], dict) or isinstance(element[key], list):
+				if isinstance(element[key], dict):
 					res &= self.parse_jsov_attributes(element[key])
 		return res
 
 	def has_defaultchild(self, jsov, node):
+		"""check whether 'default-child' attribute exists"""
 		try:
 			dc = dpath.util.get(jsov, "/" + node + "/default-child")
 			return dc
@@ -110,6 +112,7 @@ class Generator:
 			return False
 
 	def parse_for(self, text, json_obj, loop=0):
+		"""parse the html_template for {{for}} statements"""
 		i = 0
 		html = ""
 		lines = [line.strip() for line in text.splitlines() if line.strip()]
@@ -139,7 +142,7 @@ class Generator:
 		return html
 
 	def generate_css(self, jsov, node, parent):
-		# for 'children' elements
+		"""generate css styles for 'children' elements"""
 		style = ""
 		try:
 			children = dpath.util.get(jsov, "/" + node + "/children")
@@ -170,7 +173,7 @@ class Generator:
 			return ""
 
 	def generate_css_title(self, jsov, node, parent):
-		# for 'title' elements
+		"""generate css styles for 'title' elements"""
 		style = ""
 		try:
 			title = dpath.util.get(jsov, "/" + node + "/title")
@@ -191,6 +194,7 @@ class Generator:
 			return ""
 
 	def generate_default_css(self):
+		"""adding common css styles that will be frequently used"""
 		style = ".jsov_div {\n"
 		style += self.TAB + "display: inline-block;\n"
 		style += self.TAB + "padding: 4px;\n"
@@ -240,6 +244,7 @@ class Generator:
 		return style
 
 	def generate_html(self, json_obj, parent, gparent, mparent):
+		"""generate html output from the JSON object based on a JSOV template"""
 		html = ""
 		if isinstance(json_obj, dict):
 			for key in json_obj:
@@ -260,6 +265,7 @@ class Generator:
 						else:
 							html += ('<tr class="jsov_tr"><td colspan="2" class="{}_title" ' +
 								'align="center">{}</td></tr>').format(parent, key)
+						# parse images in object keys in direct children
 						if "image-url" in self.template['root']['children'][parent]:
 							width = Utils.DEFAULT_IMAGE_WIDTH
 							height = Utils.DEFAULT_IMAGE_HEIGHT
@@ -277,6 +283,7 @@ class Generator:
 					if parent != "root":
 						html += '</table>'
 					html += '</div>'
+					# parse for cascading style
 					if "cascading" in self.template['root']:
 						if self.template['root']['cascading'] == "vertical":
 							html += "<br/>"
@@ -288,9 +295,11 @@ class Generator:
 				key2 = parent
 			else:
 				key2 = gparent + "__" + parent
+			# parse values that are of resource type: image
 			if "resource" in self.template['root']['children'][gparent]['children'][parent]:
 				if self.template['root']['children'][gparent]['children'][parent]['resource'] == 'image':
 					json_obj = '<img src="' + json_obj + '"/>'
+			# parse keys that are images, in grandchildren
 			if "image-url" in self.template['root']['children'][gparent]['children'][parent]:
 				image_source = self.template['root']['children'][gparent]['children'][parent]['image-url']
 				image_source = image_source.replace("{this}", parent).replace("{grandparent}", gparent)
@@ -305,6 +314,7 @@ class Generator:
 				parent2 = '<img src="{}" width="{}" height="{}" alt="{}"/>'.format(image_source, width, height, parent)
 			else:
 				parent2 = parent + ": "
+			# parse links in grandchildren (the whole row will become a link)
 			if "link" in self.template['root']['children'][gparent]['children'][parent]:
 				link = self.template['root']['children'][gparent]['children'][parent]['link']
 				link = link.replace("{this}", str(parent)).replace("{parent}", str(mparent)).replace("{grandparent}", str(gparent))
@@ -317,6 +327,7 @@ class Generator:
 			return element_html
 
 	def generate_htmlcss(self, output_html=None, output_css=None):
+		"""call functions that generate html and css outputs"""
 		html_out = Utils.add_eol(self.generate_html(self.input, "root", "", ""))
 		css_out = self.generate_default_css() + self.generate_css(self.template, "root", "")
 		if output_html:

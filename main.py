@@ -7,6 +7,7 @@ from JSOV import generator
 
 
 def main():
+	"""add and parse arguments"""
 	parser = argparse.ArgumentParser(description='Generate a visual HTML/CSS output from a JSON file based on a JSOV template')
 	parser.add_argument('-t', '--template', nargs=1, required=True, help='the JSOV template file, or a custom HTML template in case of --custom')
 	parser.add_argument('--no-output', action='store_true', help='do not write to any output files')
@@ -18,6 +19,7 @@ def main():
 	check_args(parser.parse_args())
 	
 def check_args(args):
+	"""check which options/args are given and call the generator"""
 	if args.custom:
 		if args.no_output and (args.html_output or args.css_output):
 			print("Error: Option '--no-output' does not allow '--html-output' or '--css-output'.")
