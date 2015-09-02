@@ -13,9 +13,11 @@ from .utils import Utils
 
 
 class Generator:
+	"""class for JSOV/custom template parsing and output generation"""
 	TAB = "  "
 
 	def __init__(self, jsonfile, jsovfile, custom=False):
+		"""Initialization of JSON and JSOV file variables"""
 		dpath.options.ALLOW_EMPTY_STRING_KEYS = True
 		self.jsonfile = jsonfile
 		if isinstance(jsovfile, list):
