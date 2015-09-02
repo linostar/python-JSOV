@@ -135,8 +135,12 @@ class Generator:
 				if loop > 0:
 					old_html = html
 					html = ""
-					for child in json_obj[list(json_obj.keys())[0]].keys():
-						html += old_html.replace("{root.child}", child)
+					next_val = json_obj[list(json_obj.keys())[0]]
+					if isinstance(next_val, dict):
+						for child in next_val.keys():
+							html += old_html.replace("{root.child}", child)
+					else:
+						html += old_html.replace("{root.child}", next_val)
 				return html
 			else:
 				html += line
