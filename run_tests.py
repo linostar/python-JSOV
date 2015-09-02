@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import os
 import unittest
 
@@ -14,11 +16,15 @@ class Run_Tests(unittest.TestCase):
 	GENERATED_HTML = "tests/generated/output.html"
 	GENERATED_CSS = "tests/generated/style.css"
 
-	def create_instance(self):
+	def create_instance_nocustom(self):
 		self.visualizer = generator.Generator(self.INPUT_JSON, self.INPUT_TEMPLATE)
 
 	def generate_nocustom(self):
-		self.visualizer.generate_htmlcss(self.GENERATED_HTML, self.GENERATED_CSS)
+		[html, css] = self.visualizer.generate_htmlcss(False, self.GENERATED_HTML, self.GENERATED_CSS)
+		with open(self.OUTPUT_HTML, "w") as f1:
+			f1.write(html)
+		with open(self.OUTPUT_CSS, "w") as f1:
+			f1.write(css)
 
 	def test_input_json_exists(self):
 		self.assertTrue(os.path.exists(self.INPUT_JSON))
@@ -36,7 +42,7 @@ class Run_Tests(unittest.TestCase):
 		self.assertTrue(os.path.exists(self.GENERATED_DIR))
 
 	def test_nocustom_match_html(self):
-		self.create_instance()
+		self.create_instance_nocustom()
 		self.generate_nocustom()
 		with open(self.OUTPUT_HTML, "r") as f1:
 			out_html = f1.read()
@@ -45,7 +51,7 @@ class Run_Tests(unittest.TestCase):
 		self.assertTrue(out_html == gen_html)
 
 	def test_nocustom_match_css(self):
-		self.create_instance()
+		self.create_instance_nocustom()
 		self.generate_nocustom()
 		with open(self.OUTPUT_CSS, "r") as f1:
 			out_css = f1.read()
