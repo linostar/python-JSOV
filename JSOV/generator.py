@@ -331,7 +331,13 @@ class Generator:
 	def generate_htmlcss(self, custom, output_html=None, output_css=None):
 		"""call functions that generate html and css outputs"""
 		if custom:
-			pass
+			html_out = self.parse_for(self.custom_template, self.input)
+			if output_html:
+				if isinstance(output_html, list):
+					output_html = output_html[0]
+				with open(Utils.full_path(output_html), "w") as fp:
+					fp.write(html_out)
+			return html_out
 		else:
 			html_out = Utils.add_eol(self.generate_html(self.input, "root", "", ""))
 			css_out = self.generate_default_css() + self.generate_css(self.template, "root", "")
