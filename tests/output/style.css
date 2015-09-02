@@ -39,22 +39,13 @@
   border-radius: 5px;
 }
 
-.Players__MP {
-  background-color: #6600dd;
-  color: #ffffff;
-}
-
-.Players__Bonus {
-  background-color: #bbbb00;
-  color: #ffffff;
-}
-
 .Players__HP {
   background-color: #00dd00;
   color: #ffffff;
 }
 
-.Players__Type {
+.Players__MP {
+  background-color: #6600dd;
   color: #ffffff;
 }
 
@@ -63,9 +54,18 @@
   color: #ffffff;
 }
 
+.Players__Bonus {
+  background-color: #bbbb00;
+  color: #ffffff;
+}
+
+.Players__Type {
+  color: #ffffff;
+}
+
 .Players_title {
-  color: #000000;
-  background-color: #ffffff;
   border-radius: 5px;
+  background-color: #ffffff;
+  color: #000000;
 }
 
