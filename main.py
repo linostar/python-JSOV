@@ -27,8 +27,7 @@ def check_args(args):
 		visualizer = generator.Generator(args.inputfile, args.template, True)
 		if not args.no_output:
 			html_out = args.html_output if args.html_output else ["output.html"]
-			css_out = args.css_output if args.css_output else ["style.css"]
-			visualizer.generate_htmlcss(True, html_out, css_out)
+			visualizer.generate_htmlcss(True, html_out)
 		else:
 			print(visualizer.generate_htmlcss(True))
 	else:
