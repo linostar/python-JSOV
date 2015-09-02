@@ -28,13 +28,13 @@ def check_args(args):
 		if not args.no_output:
 			html_out = args.html_output if args.html_output else ["output.html"]
 			css_out = args.css_output if args.css_output else ["style.css"]
-			visualizer.generate_htmlcss(html_out, css_out)
+			visualizer.generate_htmlcss(True, html_out, css_out)
 		else:
-			print(visualizer.generate_htmlcss())
+			print(visualizer.generate_htmlcss(True))
 	else:
 		if args.no_output and not args.html_output and not args.css_output:
 			visualizer = generator.Generator(args.inputfile, args.template)
-			print(visualizer.generate_htmlcss())
+			print(visualizer.generate_htmlcss(False))
 		elif args.no_output:
 			print("Error: Option '--no-output' does not allow '--html-output' or '--css-output'.")
 			sys.exit(1)
@@ -42,7 +42,7 @@ def check_args(args):
 			visualizer = generator.Generator(args.inputfile, args.template)
 			html_out = args.html_output if args.html_output else ["output.html"]
 			css_out = args.css_output if args.css_output else ["style.css"]
-			visualizer.generate_htmlcss(html_out, css_out)
+			visualizer.generate_htmlcss(False, html_out, css_out)
 
 if __name__ == "__main__":
 	main()
