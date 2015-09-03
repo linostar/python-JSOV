@@ -118,6 +118,7 @@ class Generator:
 		i = 0
 		html = ""
 		lines = text.splitlines()
+		root = str(list(json_obj.keys())[0])
 		# get the "for" blocks
 		for_starts = []
 		for_ends = []
@@ -143,11 +144,23 @@ class Generator:
 		for j in range(len(for_starts)-1, -1, -1):
 			if for_starts[j] < for_ends[j]:
 				html += self.parse_for("\n".join(lines[for_starts[j]+1:for_ends[j]]),
-					json_obj, for_variables[j])
+					json_obj, for_variables[j], root)
+		html = html.replace("{root}", root)
 		return html
 
-	def parse_for(self, block, json_obj, variable):
-		pass
+	def parse_for(self, block, json_obj, variable, root):
+		html = ""
+		root 
+		if variable.isdigit():
+			for i in range(int(variable)):
+				html += block + "\n"
+		else:
+			if variable == "root.child":
+				if isinstance(json_obj[root], dict):
+					chidren = list(json_obj[root].keys())
+					for child in children:
+						html += block.replace("{root.child}", child)
+		return html
 
 	def generate_css(self, jsov, node, parent):
 		"""generate css styles for 'children' elements"""
