@@ -137,11 +137,13 @@ class Generator:
 					sys.exit(1)
 				for_ends.insert(0, i)
 				found_for -= 1
+			else:
+				html += line
 			i += 1
 		if len(for_starts) != len(for_ends):
 			print("Error: Number of {{for}} lines and that of {{endfor}} lines don't match.")
 			sys.exit(1)
-		for j in range(len(for_starts)-1, -1, -1):
+		for j in range(len(for_starts)):
 			if for_starts[j] < for_ends[j]:
 				html += self.parse_for("\n".join(lines[for_starts[j]+1:for_ends[j]]),
 					json_obj, for_variables[j], root)
@@ -157,7 +159,7 @@ class Generator:
 		else:
 			if variable == "root.child":
 				if isinstance(json_obj[root], dict):
-					chidren = list(json_obj[root].keys())
+					children = list(json_obj[root].keys())
 					for child in children:
 						html += block.replace("{root.child}", child)
 		return html
