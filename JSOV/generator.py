@@ -116,19 +116,30 @@ class Generator:
 	def parse_custom_html(self, text, json_obj):
 		"""parse the html_template for {{for}} statements"""
 		i = 0
+		html = ""
 		lines = text.splitlines()
 		# get the "for" blocks
 		for_starts = []
 		for_ends = []
 		for_variables = []
+		found_for = 0
 		for line in lines:
 			line = line.strip()
 			if line.startswith("{{for ") and line.endswith("}}"):
 				for_starts.append(i)
 				for_variables.append(line[5:-2].strip())
+				found_for += 1
 			if line == "{{endfor}}":
+				if found_for <= 0:
+					print("Error: found {{endfor}} that does not correspond to a {{for}} at line " +
+						str(i+1) + ".")
+					sys.exit(1)
 				for_ends.insert(0, i)
+				found_for -= 1
 			i += 1
+		if len(for_starts) != len(for_ends):
+			print("Error: Number of {{for}} lines and that of {{endfor}} lines don't match.")
+			sys.exit(1)
 		return html
 
 	def generate_css(self, jsov, node, parent):
