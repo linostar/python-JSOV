@@ -44,13 +44,17 @@
   color: #ffffff;
 }
 
-.Players__Score {
-  background-color: #dd0000;
+.Players__Bonus {
+  background-color: #bbbb00;
   color: #ffffff;
 }
 
-.Players__Bonus {
-  background-color: #bbbb00;
+.Players__Type {
+  color: #ffffff;
+}
+
+.Players__Score {
+  background-color: #dd0000;
   color: #ffffff;
 }
 
