@@ -124,12 +124,15 @@ class Generator:
 		for_ends = []
 		for_variables = []
 		found_for = 0
+		for_index = 0
 		for line in lines:
 			line = line.strip()
 			if line.startswith("{{for ") and line.endswith("}}"):
 				for_starts.append(i)
 				for_variables.append(line[5:-2].strip())
 				found_for += 1
+				html += "{{line" + str(for_index) + "}}"
+				for_index += 1
 			if line == "{{endfor}}":
 				if found_for <= 0:
 					print("Error: found {{endfor}} that does not correspond to a {{for}} at line " +
@@ -145,8 +148,8 @@ class Generator:
 			sys.exit(1)
 		for j in range(len(for_starts)):
 			if for_starts[j] < for_ends[j]:
-				html += self.parse_for("\n".join(lines[for_starts[j]+1:for_ends[j]]),
-					json_obj, for_variables[j], root)
+				html = html.replace("{{line" + str(j) + "}}", self.parse_for("\n".join(lines[for_starts[j]+1:for_ends[j]]),
+					json_obj, for_variables[j], root))
 		html = html.replace("{root}", root)
 		return html
 
