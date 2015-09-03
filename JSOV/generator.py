@@ -141,7 +141,8 @@ class Generator:
 				for_ends.insert(0, i)
 				found_for -= 1
 			else:
-				html += line
+				if found_for == 0:
+					html += line
 			i += 1
 		if len(for_starts) != len(for_ends):
 			print("Error: Number of {{for}} lines and that of {{endfor}} lines don't match.")
