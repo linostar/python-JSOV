@@ -140,7 +140,14 @@ class Generator:
 		if len(for_starts) != len(for_ends):
 			print("Error: Number of {{for}} lines and that of {{endfor}} lines don't match.")
 			sys.exit(1)
+		for j in range(len(for_starts)-1, -1, -1):
+			if for_starts[j] < for_ends[j]:
+				html += self.parse_for("\n".join(lines[for_starts[j]+1:for_ends[j]]),
+					json_obj, for_variables[j])
 		return html
+
+	def parse_for(self, block, json_obj, variable):
+		pass
 
 	def generate_css(self, jsov, node, parent):
 		"""generate css styles for 'children' elements"""
