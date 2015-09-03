@@ -153,18 +153,20 @@ class Generator:
 		html = html.replace("{root}", root)
 		return html
 
-	def parse_for(self, block, json_obj, variable, root):
+	def parse_for(self, block, json_obj, variable, root, depth=1):
 		html = ""
 		root 
 		if variable.isdigit():
 			for i in range(int(variable)):
 				html += block + "\n"
 		else:
-			if variable == "root.child":
+			child_depth = re.match(r"children\.(\d+)", variable)
+			child_depth = int(child_depth.group(1))
+			if child_depth == 1:
 				if isinstance(json_obj[root], dict):
 					children = list(json_obj[root].keys())
 					for child in children:
-						html += block.replace("{root.child}", child)
+						html += block.replace("{" + variable + "}", child)
 		return html
 
 	def generate_css(self, jsov, node, parent):
