@@ -113,7 +113,7 @@ class Generator:
 		except KeyError:
 			return False
 
-	def parse_custom_html(self, text, json_obj):
+	def parse_custom_template(self, text, json_obj):
 		"""parse the html_template for {{for}} statements"""
 		i = 0
 		html = ""
@@ -330,7 +330,7 @@ class Generator:
 	def generate_htmlcss(self, custom, output_html=None, output_css=None):
 		"""call functions that generate html and css outputs"""
 		if custom:
-			html_out = self.parse_for(self.custom_template, self.input)
+			html_out = self.parse_custom_template(self.custom_template, self.input)
 			if output_html:
 				if isinstance(output_html, list):
 					output_html = output_html[0]
