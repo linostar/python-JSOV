@@ -113,37 +113,21 @@ class Generator:
 		except KeyError:
 			return False
 
-	def parse_for(self, text, json_obj, loop=0):
+	def parse_custom_html(self, text, json_obj):
 		"""parse the html_template for {{for}} statements"""
 		i = 0
-		html = ""
-		lines = [line.strip() for line in text.splitlines() if line.strip()]
+		lines = text.splitlines()
+		# get the "for" blocks
+		for_starts = []
+		for_ends = []
+		for_variables = []
 		for line in lines:
+			line = line.strip()
 			if line.startswith("{{for ") and line.endswith("}}"):
-				if i + 1 < len(lines):
-					for_num = line[5:-2].strip()
-					if for_num.isdigit():
-						html += self.parse_for("\n".join(lines[(i+1):]), range(int(for_num)), 1)
-					else:
-						if for_num == "root":
-							html += self.parse_for("\n".join(lines[(i+1):]), json_obj, 1)
-						elif for_num.startswith("root.child"):
-							new_json_obj = json_obj[list(json_obj.keys())[0]]
-							if isinstance(new_json_obj, dict):
-								html += self.parse_for("\n".join(lines[(i+1):]), new_json_obj, 1)
-			elif line == "{{endfor}}":
-				if loop > 0:
-					old_html = html
-					html = ""
-					next_val = json_obj[list(json_obj.keys())[0]]
-					if isinstance(next_val, dict):
-						for child in next_val.keys():
-							html += old_html.replace("{root.child}", child)
-					else:
-						html += old_html.replace("{root.child}", next_val)
-				return html
-			else:
-				html += line
+				for_starts.append(i)
+				for_variables.append(line[5:-2].strip())
+			if line == "{{endfor}}":
+				for_ends.insert(0, i)
 			i += 1
 		return html
 
