@@ -11,14 +11,14 @@
 </head>
 <body>
 <div id="{root}">
-{{for root.child}}
-<div class="{root}_{root.child}">
+{{for children.1}}
+<div class="{root}_{children.1}">
 <div class="{root}_title">
-{root.child}
+{children.1}
 </div>
-{{for root.child.child}}
-<div class="{root}_{root.child.child}">
-{root.child.child}: {root.child.child.value}
+{{for children.2}}
+<div class="{root}_{children.2}">
+{children.2}: {children.2.value}
 </div>
 {{endfor}}
 </div>
