@@ -10,10 +10,12 @@ import dpath
 import dpath.options
 
 from .utils import Utils
+from .parse import Parse
 
 
 class Generator:
-	"""class for JSOV/custom template parsing and output generation"""
+	"""class for JSOV/custom template-based output generation"""
+
 	TAB = "  "
 
 	def __init__(self, jsonfile, jsovfile, custom=False):
@@ -87,7 +89,7 @@ class Generator:
 				return False
 		return True
 
-	def parse_jsov_attributes(self, element):
+	def check_jsov_attributes(self, element):
 		"""check if it's a proper JSOV object with proper attributes"""
 		res = True
 		if isinstance(element, dict):
@@ -102,7 +104,7 @@ class Generator:
 								.format(key, element[key]))
 							return False
 				if isinstance(element[key], dict):
-					res &= self.parse_jsov_attributes(element[key])
+					res &= self.check_jsov_attributes(element[key])
 		return res
 
 	def has_defaultchild(self, jsov, node):
@@ -112,63 +114,6 @@ class Generator:
 			return dc
 		except KeyError:
 			return False
-
-	def parse_custom_template(self, text, json_obj):
-		"""parse the html_template for {{for}} statements"""
-		i = 0
-		html = ""
-		lines = text.splitlines()
-		root = str(list(json_obj.keys())[0])
-		# get the "for" blocks
-		for_starts = []
-		for_ends = []
-		for_variables = []
-		found_for = 0
-		for_index = 0
-		for line in lines:
-			line = line.strip()
-			if line.startswith("{{for ") and line.endswith("}}"):
-				for_starts.append(i)
-				for_variables.append(line[5:-2].strip())
-				found_for += 1
-				html += "{{line" + str(for_index) + "}}"
-				for_index += 1
-			if line == "{{endfor}}":
-				if found_for <= 0:
-					print("Error: found {{endfor}} that does not correspond to a {{for}} at line " +
-						str(i+1) + ".")
-					sys.exit(1)
-				for_ends.insert(0, i)
-				found_for -= 1
-			else:
-				if found_for == 0:
-					html += line
-			i += 1
-		if len(for_starts) != len(for_ends):
-			print("Error: Number of {{for}} lines and that of {{endfor}} lines don't match.")
-			sys.exit(1)
-		for j in range(len(for_starts)):
-			if for_starts[j] < for_ends[j]:
-				html = html.replace("{{line" + str(j) + "}}", self.parse_for("\n".join(lines[for_starts[j]+1:for_ends[j]]),
-					json_obj, for_variables[j], root))
-		html = html.replace("{root}", root)
-		return html
-
-	def parse_for(self, block, json_obj, variable, root, depth=1):
-		html = ""
-		root 
-		if variable.isdigit():
-			for i in range(int(variable)):
-				html += block + "\n"
-		else:
-			child_depth = re.match(r"children\.(\d+)", variable)
-			child_depth = int(child_depth.group(1))
-			if child_depth == 1:
-				if isinstance(json_obj[root], dict):
-					children = list(json_obj[root].keys())
-					for child in children:
-						html += block.replace("{" + variable + "}", child)
-		return html
 
 	def generate_css(self, jsov, node, parent):
 		"""generate css styles for 'children' elements"""
@@ -358,7 +303,7 @@ class Generator:
 	def generate_htmlcss(self, custom, output_html=None, output_css=None):
 		"""call functions that generate html and css outputs"""
 		if custom:
-			html_out = self.parse_custom_template(self.custom_template, self.input)
+			html_out = Parse.parse_custom_template(self.custom_template, self.input)
 			if output_html:
 				if isinstance(output_html, list):
 					output_html = output_html[0]
