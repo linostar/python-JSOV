@@ -40,21 +40,49 @@ class Parse:
 			sys.exit(1)
 		for j in range(len(for_starts)):
 			if for_starts[j] < for_ends[j]:
-				html = html.replace("{{line" + str(j) + "}}", Parse.parse_for("\n".join(lines[for_starts[j]+1:for_ends[j]]),
-					json_obj, for_variables[j], root, int(for_variables[j][-1])))
+				loop_block = "\n".join(lines[for_starts[j]+1:for_ends[j]])
+				if for_variables[j].isdigit():
+					html += Parse.repeat_block(loop_block, int(for_variables[j]))
+				else:
+					child_depth = int(for_variables[j][-1])
+					iterator = Parse.parse_for(loop_block, json_obj, for_variables[j],
+						root, child_depth)
+					print(iterator)
+
+					#html = html.replace("{{line" + str(j) + "}}", replacement)
 		html = html.replace("{root}", root)
 		return html
 
 	@staticmethod
 	def parse_for(block, json_obj, variable, root, depth=1):
 		if depth == 1:
+			children = {}
 			if isinstance(json_obj[root], dict):
-				children = list(json_obj[root].keys())
+				for key in json_obj[root].keys():
+					children[key] = ""
 				return children
 		elif depth > 1:
-			grandchildren = []
+			grandchildren = {}
 			if isinstance(json_obj[root], dict):
-				children = list(json_obj[root].keys())
-				for child in children:
-					grandchildren.extend(Parse.parse_for(json_obj[root], variable, child, depth-1))
+				for key in json_obj[root].keys():
+					grandchildren[key] = Parse.parse_for(block, json_obj[root], variable, key, depth-1)
 				return grandchildren
+
+	@staticmethod
+	def repeat_block(block, json_obj, variable, root, depth=1, parent=None):
+		new_block = ""
+		if variable.isdigit():
+			count = int(variable)
+			for i in range(len(count)):
+				new_block += block + "\n"
+			return new_block
+		if depth == 1:
+			for key in json_obj[root]:
+				new_block += block.replace("{" + variable + "}", key) + "\n"
+				next_variable = "{{for" + variable[:-1] + str(child_depth+1) + "}}"
+				if next_variable in block:
+					newbock += Parse.repeat_block(block, json_obj, variable[:-1] + str(child_depth+1),
+						root, child_depth+1, key)
+			return new_block
+		elif depth > 1:
+			pass
