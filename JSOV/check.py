@@ -17,32 +17,32 @@ class Check:
 		if not "children" in template['root']:
 			print("Error: object 'root' lacks a child called 'children'.")
 			return False
-		if not isinstance(template['root']['children'], list):
+		if not isinstance(template['root']['children'], dict):
 			print("Error: 'children' must be a list of objects.")
 			return False
 		res = True
 		for child in template['root']['children']:
-			res &= Check.check_jsov_children(child)
+			res &= Check.check_jsov_children(template['root']['children'][child])
 		return res & Check.check_jsov_attributes(template)
 
 	@staticmethod
 	def check_jsov_children(child):
 		"""check attributes in JSOV children objects"""
 		res = True
-		for param in list(child.values())[0].keys():
+		for param in child:
 			if param not in Utils.children_attributes.keys():
 				print("Error: '{}' is not a recognized attribute.".format(param))
 				return False
 			if param == "children":
 				for onlykey in child.keys():
-					for newchild in child[onlykey]['children']:
-						res &= Check.check_jsov_children(newchild)
+					for newchild in child['children']:
+						res &= Check.check_jsov_children(child['children'][newchild])
 			if param == "title":
 				for onlykey in child.keys():
-					res &= Check.check_jsov_special(child[onlykey]['title'])
+					res &= Check.check_jsov_special(child['title'])
 			if param == "default-child":
 				for onlykey in child.keys():
-					res &= Check.check_jsov_special(child[onlykey]['default-child'])
+					res &= Check.check_jsov_special(child['default-child'])
 		return res
 
 	@staticmethod
