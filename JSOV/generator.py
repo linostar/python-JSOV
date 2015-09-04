@@ -11,6 +11,7 @@ import dpath.options
 
 from .utils import Utils
 from .parse import Parse
+from .check import Check
 
 
 class Generator:
@@ -51,7 +52,7 @@ class Generator:
 		style = ""
 		try:
 			children = dpath.util.get(jsov, "/" + node + "/children")
-			has_dc = self.has_defaultchild(jsov, node)
+			has_dc = Check.has_defaultchild(jsov, node)
 			for key in children:
 				if parent:
 					style += "." + str(parent) + "__" + str(key) + " {\n"

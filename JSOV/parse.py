@@ -40,7 +40,7 @@ class Parse
 			sys.exit(1)
 		for j in range(len(for_starts)):
 			if for_starts[j] < for_ends[j]:
-				html = html.replace("{{line" + str(j) + "}}", self.parse_for("\n".join(lines[for_starts[j]+1:for_ends[j]]),
+				html = html.replace("{{line" + str(j) + "}}", Parse.parse_for("\n".join(lines[for_starts[j]+1:for_ends[j]]),
 					json_obj, for_variables[j], root))
 		html = html.replace("{root}", root)
 		return html
