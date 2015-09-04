@@ -1,6 +1,6 @@
 import re
 
-class Parse
+class Parse:
 	"""class for parsing templates"""
 
 	@staticmethod

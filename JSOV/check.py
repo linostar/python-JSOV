@@ -5,7 +5,7 @@ import dpath.options
 
 from .utils import Utils
 
-class Check
+class Check:
 	"""class for checking templates and their attributes"""
 
 	@staticmethod
