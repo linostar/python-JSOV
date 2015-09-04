@@ -41,23 +41,20 @@ class Parse:
 		for j in range(len(for_starts)):
 			if for_starts[j] < for_ends[j]:
 				html = html.replace("{{line" + str(j) + "}}", Parse.parse_for("\n".join(lines[for_starts[j]+1:for_ends[j]]),
-					json_obj, for_variables[j], root))
+					json_obj, for_variables[j], root, int(for_variables[j][-1])))
 		html = html.replace("{root}", root)
 		return html
 
 	@staticmethod
 	def parse_for(block, json_obj, variable, root, depth=1):
-		html = ""
-		root 
-		if variable.isdigit():
-			for i in range(int(variable)):
-				html += block + "\n"
-		else:
-			child_depth = re.match(r"children\.(\d+)", variable)
-			child_depth = int(child_depth.group(1))
-			if child_depth == 1:
-				if isinstance(json_obj[root], dict):
-					children = list(json_obj[root].keys())
-					for child in children:
-						html += block.replace("{" + variable + "}", child)
-		return html
+		if depth == 1:
+			if isinstance(json_obj[root], dict):
+				children = list(json_obj[root].keys())
+				return children
+		elif depth > 1:
+			grandchildren = []
+			if isinstance(json_obj[root], dict):
+				children = list(json_obj[root].keys())
+				for child in children:
+					grandchildren.extend(Parse.parse_for(json_obj[root], variable, child, depth-1))
+				return grandchildren
