@@ -243,6 +243,8 @@ class Generator:
 					fp.write(Utils.add_eol(html_out))
 			return html_out
 		else:
+			if not Check.check_jsov(self.template):
+				sys.exit(1)
 			html_out = Utils.add_eol(self.generate_html(self.input, "root", "", ""))
 			css_out = self.generate_default_css() + self.generate_css(self.template, "root", "")
 			if output_html:

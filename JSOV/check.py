@@ -23,7 +23,7 @@ class Check
 		res = True
 		for child in template['root']['children']:
 			res &= Check.check_jsov_children(child)
-		return res
+		return res & Check.check_jsov_attributes(template)
 
 	@staticmethod
 	def check_jsov_children(child):
