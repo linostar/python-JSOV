@@ -108,8 +108,11 @@ class Parse:
 							if child_depth == 1:
 								line = "for children1 in json_obj[root]:"
 							else:
-								line = "for children{0} in children{1}:".format(
-									str(child_depth), str(child_depth-1))
+								nested_dict = "json_obj[root]"
+								for k in range(1, child_depth):
+									nested_dict += "[children{}]".format(k)
+								line = "for children{0} in {1}:".format(
+									str(child_depth), nested_dict)
 						else:
 							pass
 					except Exception:
