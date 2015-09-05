@@ -16,11 +16,16 @@ class Parse:
 		for_variables = []
 		found_for = 0
 		for_index = 0
+		parent = ""
 		for line in lines:
 			line = line.strip()
 			if line.startswith("{{for ") and line.endswith("}}"):
 				for_starts.append(i)
-				for_variables.append(line[5:-2].strip())
+				var_end = line.find("}}")
+				for_variables.append(line[5:var_end].strip())
+				parent_start = line.find("{{", var_end)
+				if parent_start != -1:
+					parent = line[parent_start+9:-2]
 				found_for += 1
 				html += "{{line" + str(for_index) + "}}"
 				for_index += 1
@@ -45,9 +50,9 @@ class Parse:
 					html += Parse.repeat_block(loop_block, int(for_variables[j]))
 				else:
 					child_depth = int(for_variables[j][-1])
-					iterator = Parse.repeat_block(loop_block, json_obj, for_variables[j],
-						root, child_depth)
-					#html = html.replace("{{line" + str(j) + "}}", replacement)
+					replacement = Parse.repeat_block(loop_block, json_obj, for_variables[j],
+						root, child_depth, parent)
+					html = html.replace("{{line" + str(j) + "}}", replacement)
 		html = html.replace("{root}", root)
 		return html
 
@@ -61,11 +66,10 @@ class Parse:
 			return new_block
 		if depth == 1:
 			for key in json_obj[root]:
-				new_block += block.replace("{" + variable + "}", key) + "\n"
-				next_variable = "{{for" + variable[:-1] + str(depth+1) + "}}"
-				if next_variable in block:
-					newbock += Parse.repeat_block(block, json_obj, variable[:-1] + str(depth+1),
-						root, child_depth+1, key)
+				next_variable = variable[:-1] + str(depth+1)
+				new_block += block.replace("{" + variable + "}", str(key)).replace(
+					"{{for " + next_variable + "}}", "{{for " + next_variable + "}}{{parent:" +
+					str(key) + "}}") + "\n"
 			return new_block
 		elif depth > 1:
 			pass
