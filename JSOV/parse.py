@@ -122,11 +122,13 @@ class Parse:
 				continue
 			else:
 				line = "Parse.templated_html += \"\"\"{}\"\"\"".format(line)
+			format_arr = []
 			matched_var = re.search(r"({children\.(\d+)})", line)
 			if matched_var:
 				child_depth = matched_var.group(2)
 				line = line.replace(matched_var.group(1), "{children" + str(child_depth) + "}")
-				line += ".format({0}={0})".format("children" + str(child_depth))
+				#line += ".format({0}={0})".format("children" + str(child_depth))
+				format_arr.append(("children" + str(child_depth), "children" + str(child_depth)))
 			matched_var = re.search(r"({children\.(\d+)\.value})", line)
 			if matched_var:
 				child_depth = int(matched_var.group(2))
@@ -134,7 +136,13 @@ class Parse:
 				for k in range(1, child_depth+1):
 					child_val += "[children{}]".format(k)
 				line = line.replace(matched_var.group(1), "{children" + str(child_depth) + "val}")
-				line += ".format({0}={1})".format("children" + str(child_depth) + "val", child_val)
+				#line += ".format({0}={1})".format("children" + str(child_depth) + "val", child_val)
+				format_arr.append(("children" + str(child_depth) + "val", child_val))
+			if len(format_arr) == 1:
+				line += ".format({}={})".format(format_arr[0][0], format_arr[0][1])
+			elif len(format_arr) == 2:
+				line += ".format({}={}, {}={})".format(format_arr[0][0], format_arr[0][1],
+					format_arr[1][0], format_arr[1][1])
 			line = line.replace("{root}", root)
 			block += indent + line + "\n"
 		exec(block)
