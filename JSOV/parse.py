@@ -3,6 +3,8 @@ import re
 class Parse:
 	"""class for parsing templates"""
 
+	templated_html = ""
+
 	@staticmethod
 	def parse_custom_template1(text, json_obj):
 		"""parse the html_template for {{for}} statements"""
@@ -88,7 +90,7 @@ class Parse:
 		indent = ""
 		next_indent = ""
 		block = ""
-		html = ""
+		Parse.templated_html = "b"
 		num_line = 0
 		lines = text.splitlines()
 		for line in lines:
@@ -116,11 +118,12 @@ class Parse:
 				next_indent = indent[:-1]
 				continue
 			else:
-				line = "html += \"\"\"{}\"\"\"".format(line)
+				line = "Parse.templated_html += \"\"\"{}\"\"\"".format(line)
 			matched_var = re.search(r"({children\.(\d+)})", line)
 			if matched_var:
 				line = line.replace(matched_var.group(1), "{children" + str(matched_var.group(2)) + "}")
 				line += ".format({0}={0})".format("children" + str(matched_var.group(2)))
 			line = line.replace("{root}", root)
 			block += indent + line + "\n"
-		return block
+		exec(block)
+		return Parse.templated_html
