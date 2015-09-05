@@ -235,7 +235,8 @@ class Generator:
 	def generate_htmlcss(self, custom, output_html=None, output_css=None):
 		"""call functions that generate html and css outputs"""
 		if custom:
-			html_out = Parse.parse_custom_template(self.custom_template, self.input)
+			root = list(self.input.keys())[0]
+			html_out = Parse.parse_custom_template(self.custom_template, self.input, root)
 			if output_html:
 				if isinstance(output_html, list):
 					output_html = output_html[0]

@@ -4,7 +4,7 @@ class Parse:
 	"""class for parsing templates"""
 
 	@staticmethod
-	def parse_custom_template(text, json_obj):
+	def parse_custom_template1(text, json_obj):
 		"""parse the html_template for {{for}} statements"""
 		i = 0
 		html = ""
@@ -82,3 +82,41 @@ class Parse:
 					"{{for " + next_variable + "}}", "{{for " + next_variable + "}}{{parent:" +
 					str(key) + "}}") + "\n"
 			return new_block
+
+	@staticmethod
+	def parse_custom_template(text, json_obj, root):
+		indent = ""
+		next_indent = ""
+		block = ""
+		num_line = 0
+		lines = text.splitlines()
+		for line in lines:
+			num_line += 1
+			indent = next_indent
+			if line.startswith("{{for "):
+				next_indent += "\t"
+				for_var = line[5:-2].strip()
+				if for_var.isdigit():
+					line = "for i{0} in range({1}):".format(str(num_line), for_var)
+				else:
+					try:
+						if not for_var.endswith(".value"):
+							child_depth = int(for_var[-1])
+							if child_depth == 1:
+								line = "for children1 in json_obj[root]:"
+							else:
+								line = "for children{0} in children{1}:".format(
+									str(child_depth), str(child_depth-1))
+						else:
+							pass
+					except Exception:
+						print("Error: You can only use 'children.x' or 'children.x.value' where x is a number.")
+			elif line == "{{endfor}}":
+				next_indent = indent[:-1]
+				continue
+			matched_var = re.search(r"({children\.(\d+)})", line)
+			if matched_var:
+				line = line.replace(matched_var.group(1), "children" + str(matched_var.group(2)))
+			line = line.replace("{root}", root)
+			block += indent + line + "\n"
+		return block
