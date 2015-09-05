@@ -64,12 +64,12 @@ class Parse:
 			for i in range(len(count)):
 				new_block += block + "\n"
 			return new_block
-		if depth == 1:
+		if depth >= 1:
 			for key in json_obj[root]:
 				next_variable = variable[:-1] + str(depth+1)
 				new_block += block.replace("{" + variable + "}", str(key)).replace(
 					"{{for " + next_variable + "}}", "{{for " + next_variable + "}}{{parent:" +
 					str(key) + "}}") + "\n"
 			return new_block
-		elif depth > 1:
+		elif depth < 1:
 			pass
