@@ -119,7 +119,8 @@ class Parse:
 				line = "html += \"\"\"{}\"\"\"".format(line)
 			matched_var = re.search(r"({children\.(\d+)})", line)
 			if matched_var:
-				line = line.replace(matched_var.group(1), "children" + str(matched_var.group(2)))
+				line = line.replace(matched_var.group(1), "{children" + str(matched_var.group(2)) + "}")
+				line += ".format({0}={0})".format("children" + str(matched_var.group(2)))
 			line = line.replace("{root}", root)
 			block += indent + line + "\n"
 		return block
