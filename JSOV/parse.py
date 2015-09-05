@@ -124,8 +124,17 @@ class Parse:
 				line = "Parse.templated_html += \"\"\"{}\"\"\"".format(line)
 			matched_var = re.search(r"({children\.(\d+)})", line)
 			if matched_var:
-				line = line.replace(matched_var.group(1), "{children" + str(matched_var.group(2)) + "}")
-				line += ".format({0}={0})".format("children" + str(matched_var.group(2)))
+				child_depth = matched_var.group(2)
+				line = line.replace(matched_var.group(1), "{children" + str(child_depth) + "}")
+				line += ".format({0}={0})".format("children" + str(child_depth))
+			matched_var = re.search(r"({children\.(\d+)\.value})", line)
+			if matched_var:
+				child_depth = int(matched_var.group(2))
+				child_val = "json_obj[root]"
+				for k in range(1, child_depth+1):
+					child_val += "[children{}]".format(k)
+				line = line.replace(matched_var.group(1), "{children" + str(child_depth) + "val}")
+				line += ".format({0}={1})".format("children" + str(child_depth) + "val", child_val)
 			line = line.replace("{root}", root)
 			block += indent + line + "\n"
 		exec(block)
