@@ -88,6 +88,7 @@ class Parse:
 		indent = ""
 		next_indent = ""
 		block = ""
+		html = ""
 		num_line = 0
 		lines = text.splitlines()
 		for line in lines:
@@ -114,6 +115,8 @@ class Parse:
 			elif line == "{{endfor}}":
 				next_indent = indent[:-1]
 				continue
+			else:
+				line = "html += \"\"\"{}\"\"\"".format(line)
 			matched_var = re.search(r"({children\.(\d+)})", line)
 			if matched_var:
 				line = line.replace(matched_var.group(1), "children" + str(matched_var.group(2)))
