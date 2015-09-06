@@ -40,6 +40,10 @@ class Parse:
 			elif line == "{{endfor}}":
 				next_indent = indent[:-1]
 				continue
+			elif line.startswith("{{if") and line.endswith("}}"):
+				pass
+			elif line == "{{endif}}":
+				pass
 			else:
 				line = "Parse.templated_html += \"\"\"{}\"\"\"".format(line)
 			format_arr = []
