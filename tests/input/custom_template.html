@@ -17,9 +17,11 @@
 {children.1}
 </div>
 {{for children.2}}
+{{if children.2 != "Type"}}
 <div class="{root}_{children.2}">
 {children.2}: {children.2.value}
 </div>
+{{endif}}
 {{endfor}}
 </div>
 {{endfor}}

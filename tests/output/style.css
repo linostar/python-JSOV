@@ -39,18 +39,8 @@
   border-radius: 5px;
 }
 
-.Players__HP {
-  background-color: #00dd00;
-  color: #ffffff;
-}
-
 .Players__MP {
   background-color: #6600dd;
-  color: #ffffff;
-}
-
-.Players__Score {
-  background-color: #dd0000;
   color: #ffffff;
 }
 
@@ -63,9 +53,19 @@
   color: #ffffff;
 }
 
+.Players__Score {
+  background-color: #dd0000;
+  color: #ffffff;
+}
+
+.Players__HP {
+  background-color: #00dd00;
+  color: #ffffff;
+}
+
 .Players_title {
-  border-radius: 5px;
-  color: #000000;
   background-color: #ffffff;
+  color: #000000;
+  border-radius: 5px;
 }
 
