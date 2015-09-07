@@ -5,25 +5,25 @@
 	<title>Test</title>
 </head>
 <body>
-<div id="{root}">
-{{for children.1}}
-<div class="{root}_{children.1}">
-<div class="{root}_title">
-{children.1}
+<div id="{{ root }}">
+{% for children.1 %}
+<div class="{{ root }}_{{ children.1 }}">
+<div class="{{ root }}_title">
+{{ children.1 }}
 </div>
-{{for children.2}}
-<div class="{root}_{children.2}">
-{{if children.2 == "Type"}}
-{children.2}: <img src="{children.2.value}"/>
-{{elif children.2 == "HP"}}
-<a href="{root}/{children.2}">{children.2}: {children.2.value}</a>
-{{else}}
-{children.2}: {children.2.value}
-{{endif}}
+{% for children.2 %}
+<div class="{{ root }}_{{ children.2 }}">
+{% if children.2 == "Type" %}
+{{ children.2 }}: <img src="{{ children.2.value }}"/>
+{% elif children.2 == "HP" %}
+<a href="{{ root }}/{{ children.2 }}">{{ children.2 }}: {{ children.2.value }}</a>
+{% else %}
+{{ children.2 }}: {{ children.2.value }}
+{% endif %}
 </div>
-{{endfor}}
+{% endfor %}
 </div>
-{{endfor}}
+{% endfor %}
 </div>
 </body>
 </html>
