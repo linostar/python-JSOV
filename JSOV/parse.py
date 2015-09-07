@@ -15,6 +15,7 @@ class Parse:
 		num_line = 0
 		lines = text.splitlines()
 		for line in lines:
+			format_arr = []
 			num_line += 1
 			indent = next_indent
 			if line.startswith("{% for ") and line.endswith(" %}"):
@@ -44,16 +45,23 @@ class Parse:
 				continue
 			elif line.startswith("{% if") and line.endswith(" %}"):
 				next_indent += "\t"
-				new_line = Parse.parse_if_statement(line)
+				variable, new_line = Parse.parse_if_statement(line)
 				if new_line:
-					line = new_line
+					if variable.endswith("val"):
+						format_arr.append(variable, "") # need change
+					else:
+						format_arr.append(variable, variable)
 				else:
 					print("Error in 'if' statement syntax.")
 					sys.exit(1)
 			elif line.startswith("{% elif") and line.endswith(" %}"):
 				indent = indent[:-1]
-				new_line = Parse.parse_if_statement(line)
+				variable, new_line = Parse.parse_if_statement(line)
 				if new_line:
+					if variable.endswith("val"):
+						format_arr.append(variable, "") # need change
+					else:
+						format_arr.append(variable, variable)
 					line = new_line
 				else:
 					print("Error in 'elif' statement syntax.")
@@ -66,7 +74,6 @@ class Parse:
 				continue
 			else:
 				line = "Parse.templated_html += \"\"\"{}\"\"\"".format(line)
-			format_arr = []
 			matched_var = re.search(r"({{\schildren\.(\d+) }})", line)
 			if matched_var:
 				child_depth = matched_var.group(2)
@@ -87,11 +94,21 @@ class Parse:
 					format_arr[1][0], format_arr[1][1])
 			line = line.replace("{{ root }}", root)
 			block += indent + line + "\n"
+		print(block)
 		exec(block)
 		return Parse.templated_html
 
 	@staticmethod
 	def parse_if_statement(line):
-		detected = re.search(r"^{% (if|elif) (root|children\.\d+|children\.\d+.value) (==|!=|>|<|>=|<=) (\d+|\d+\.\d+|\".*\"|\'.*\'|True|False|None) %}$", line)
-		if detected:
-			return "{0} {{{1}}} {2} {3}:".format(detected.group(1), detected.group(2), detected.group(3), detected.group(4))
+		matched = re.search(r"^{% (if|elif) (root|children\.\d+|children\.\d+.value) (==|!=|>|<|>=|<=) (\d+|\d+\.\d+|\".*\"|\'.*\'|True|False|None) %}$", line)
+		if matched:
+			parsed_if = matched.group(1) + " {{ " + matched.group(2) + " }} " + matched.group(3) + " " + str(matched.group(4)) + ":"
+			if matched.group(2).endswith(".value"):
+				child_depth = re.search(r"\d+", matched.group(2))
+				variable = "children" + child_depth + "val"
+			elif matched.group(2).startswith("children."):
+				child_depth = re.search(r"\d+", matched.group(2))
+				variable = "children" + child_depth
+			else:
+				variable = "root"
+			return variable, parsed_if
