@@ -10,11 +10,14 @@ from JSOV.utils import Utils
 class Run_Tests(unittest.TestCase):
 	INPUT_JSON = "tests/input/sample.json"
 	INPUT_TEMPLATE = "tests/input/template.jsov"
+	INPUT_CUSTOM = "tests/input/custom_template.html"
 	OUTPUT_HTML = "tests/output/output.html"
 	OUTPUT_CSS = "tests/output/style.css"
+	OUTPUT_CUSTOM = "tests/output/custom_output.html"
 	GENERATED_DIR = "tests/generated/"
 	GENERATED_HTML = "tests/generated/output.html"
 	GENERATED_CSS = "tests/generated/style.css"
+	GENERATED_CUSTOM = "tests/generated/custom_output.html"
 
 	def create_instance_nocustom(self):
 		self.visualizer = generator.Generator(self.INPUT_JSON, self.INPUT_TEMPLATE)
@@ -59,6 +62,14 @@ class Run_Tests(unittest.TestCase):
 			gen_css = f2.read()
 		self.assertTrue(Utils.compare_css_outputs(out_css, gen_css))
 
+	def test_custom_match_html(self):
+		self.create_instance_custom()
+		self.generate_custom()
+		with open(self.OUTPUT_CUSTOM, "r") as f1:
+			out_html = f1.read()
+		with open(self.GENERATED_CUSTOM, "r") as f2:
+			gen_html = f2.read()
+		self.assertTrue(out_html == gen_html)
 
 if __name__ == "__main__":
 	unittest.main()
