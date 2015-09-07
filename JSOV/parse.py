@@ -11,7 +11,7 @@ class Parse:
 		indent = ""
 		next_indent = ""
 		block = ""
-		Parse.templated_html = "b"
+		Parse.templated_html = ""
 		num_line = 0
 		lines = text.splitlines()
 		for line in lines:
@@ -45,9 +45,15 @@ class Parse:
 				continue
 			elif line.startswith("{% if") and line.endswith(" %}"):
 				next_indent += "\t"
-				old_variable, variable, new_line = Parse.parse_if_statement(line)
+				old_variable, variable, child_depth, new_line = Parse.parse_if_statement(line)
 				if new_line:
-					line = new_line.format("{0}={0}".format(variable)).replace(old_variable, variable)
+					if old_variable.endswith(".value"):
+						child_val = "json_obj[root]"
+						for k in range(1, child_depth+1):
+							child_val += "[children{}]".format(k)
+						line = new_line.replace(old_variable, child_val)
+					else:
+						line = new_line.replace(old_variable, variable).format("{0}={0}".format(variable))
 					block += indent + line + "\n"
 					continue
 				else:
@@ -55,9 +61,15 @@ class Parse:
 					sys.exit(1)
 			elif line.startswith("{% elif") and line.endswith(" %}"):
 				indent = indent[:-1]
-				old_variable, variable, new_line = Parse.parse_if_statement(line)
+				old_variable, variable, child_depth, new_line = Parse.parse_if_statement(line)
 				if new_line:
-					line = new_line.format("{0}={0}".format(variable)).replace(old_variable, variable)
+					if old_variable.endswith(".value"):
+						child_val = "json_obj[root]"
+						for k in range(1, child_depth+1):
+							child_val += "[children{}]".format(k)
+						line = new_line.replace(old_variable, child_val)
+					else:
+						line = new_line.replace(old_variable, variable).format("{0}={0}".format(variable))
 					block += indent + line + "\n"
 					continue
 				else:
@@ -107,4 +119,5 @@ class Parse:
 				variable = "children" + str(child_depth.group(1))
 			else:
 				variable = "root"
-			return matched.group(2), variable, parsed_if
+				child_depth = 0
+			return matched.group(2), variable, int(child_depth.group(1)), parsed_if

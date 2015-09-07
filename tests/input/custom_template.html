@@ -17,6 +17,8 @@
 {{ children.2 }}: <img src="{{ children.2.value }}"/>
 {% elif children.2 == "HP" %}
 <a href="{{ root }}/{{ children.2 }}">{{ children.2 }}: {{ children.2.value }}</a>
+{% elif children.2.value == 0 %}
+<div style="color: red">{{ children.2 }}: {{ children.2.value }}</div>
 {% else %}
 {{ children.2 }}: {{ children.2.value }}
 {% endif %}
