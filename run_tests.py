@@ -27,15 +27,9 @@ class Run_Tests(unittest.TestCase):
 
 	def generate_nocustom(self):
 		[html, css] = self.visualizer.generate_htmlcss(False, self.GENERATED_HTML, self.GENERATED_CSS)
-		with open(self.OUTPUT_HTML, "w") as f1:
-			f1.write(html)
-		with open(self.OUTPUT_CSS, "w") as f1:
-			f1.write(css)
 
 	def generate_custom(self):
 		html = self.visualizer.generate_htmlcss(True, self.GENERATED_CUSTOM)
-		with open(self.OUTPUT_CUSTOM, "w") as f1:
-			f1.write(html)
 
 	def test_input_json_exists(self):
 		self.assertTrue(os.path.exists(self.INPUT_JSON))
