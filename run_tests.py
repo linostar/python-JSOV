@@ -20,7 +20,10 @@ class Run_Tests(unittest.TestCase):
 	GENERATED_CUSTOM = "tests/generated/custom_output.html"
 
 	def create_instance_nocustom(self):
-		self.visualizer = generator.Generator(self.INPUT_JSON, self.INPUT_TEMPLATE)
+		self.visualizer = generator.Generator(self.INPUT_JSON, self.INPUT_TEMPLATE, False)
+
+	def create_instance_custom(self):
+		self.visualizer = generator.Generator(self.INPUT_JSON, self.INPUT_CUSTOM, True)
 
 	def generate_nocustom(self):
 		[html, css] = self.visualizer.generate_htmlcss(False, self.GENERATED_HTML, self.GENERATED_CSS)
@@ -28,6 +31,11 @@ class Run_Tests(unittest.TestCase):
 			f1.write(html)
 		with open(self.OUTPUT_CSS, "w") as f1:
 			f1.write(css)
+
+	def generate_custom(self):
+		html = self.visualizer.generate_htmlcss(True, self.GENERATED_CUSTOM)
+		with open(self.OUTPUT_CUSTOM, "w") as f1:
+			f1.write(html)
 
 	def test_input_json_exists(self):
 		self.assertTrue(os.path.exists(self.INPUT_JSON))
