@@ -45,24 +45,21 @@ class Parse:
 				continue
 			elif line.startswith("{% if") and line.endswith(" %}"):
 				next_indent += "\t"
-				variable, new_line = Parse.parse_if_statement(line)
+				old_variable, variable, new_line = Parse.parse_if_statement(line)
 				if new_line:
-					if variable.endswith("val"):
-						format_arr.append(variable, "") # need change
-					else:
-						format_arr.append(variable, variable)
+					line = new_line.format("{0}={0}".format(variable)).replace(old_variable, variable)
+					block += indent + line + "\n"
+					continue
 				else:
 					print("Error in 'if' statement syntax.")
 					sys.exit(1)
 			elif line.startswith("{% elif") and line.endswith(" %}"):
 				indent = indent[:-1]
-				variable, new_line = Parse.parse_if_statement(line)
+				old_variable, variable, new_line = Parse.parse_if_statement(line)
 				if new_line:
-					if variable.endswith("val"):
-						format_arr.append(variable, "") # need change
-					else:
-						format_arr.append(variable, variable)
-					line = new_line
+					line = new_line.format("{0}={0}".format(variable)).replace(old_variable, variable)
+					block += indent + line + "\n"
+					continue
 				else:
 					print("Error in 'elif' statement syntax.")
 					sys.exit(1)
@@ -94,7 +91,6 @@ class Parse:
 					format_arr[1][0], format_arr[1][1])
 			line = line.replace("{{ root }}", root)
 			block += indent + line + "\n"
-		print(block)
 		exec(block)
 		return Parse.templated_html
 
@@ -102,13 +98,13 @@ class Parse:
 	def parse_if_statement(line):
 		matched = re.search(r"^{% (if|elif) (root|children\.\d+|children\.\d+.value) (==|!=|>|<|>=|<=) (\d+|\d+\.\d+|\".*\"|\'.*\'|True|False|None) %}$", line)
 		if matched:
-			parsed_if = matched.group(1) + " {{ " + matched.group(2) + " }} " + matched.group(3) + " " + str(matched.group(4)) + ":"
+			parsed_if = matched.group(1) + " " + matched.group(2) + " " + matched.group(3) + " " + str(matched.group(4)) + ":"
 			if matched.group(2).endswith(".value"):
-				child_depth = re.search(r"\d+", matched.group(2))
-				variable = "children" + child_depth + "val"
+				child_depth = re.search(r"(\d+)", matched.group(2))
+				variable = "children" + str(child_depth.group(1)) + "val"
 			elif matched.group(2).startswith("children."):
-				child_depth = re.search(r"\d+", matched.group(2))
-				variable = "children" + child_depth
+				child_depth = re.search(r"(\d+)", matched.group(2))
+				variable = "children" + str(child_depth.group(1))
 			else:
 				variable = "root"
-			return variable, parsed_if
+			return matched.group(2), variable, parsed_if
