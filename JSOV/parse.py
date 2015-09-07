@@ -1,3 +1,4 @@
+import sys
 import re
 
 class Parse:
@@ -37,17 +38,32 @@ class Parse:
 							pass
 					except Exception:
 						print("Error: You can only use 'children.x' or 'children.x.value' where x is a number.")
+						sys.exit(1)
 			elif line == "{% endfor %}":
 				next_indent = indent[:-1]
 				continue
 			elif line.startswith("{% if") and line.endswith(" %}"):
-				pass
+				next_indent += "\t"
+				new_line = Parse.parse_if_statement(line)
+				if new_line:
+					line = new_line
+				else:
+					print("Error in 'if' statement syntax.")
+					sys.exit(1)
 			elif line.startswith("{% elif") and line.endswith(" %}"):
-				pass
+				indent = indent[:-1]
+				new_line = Parse.parse_if_statement(line)
+				if new_line:
+					line = new_line
+				else:
+					print("Error in 'elif' statement syntax.")
+					sys.exit(1)
 			elif line == "{% else %}":
-				pass
+				indent = indent[:-1]
+				line = "else:"
 			elif line == "{% endif %}":
-				pass
+				next_indent = indent[:-1]
+				continue
 			else:
 				line = "Parse.templated_html += \"\"\"{}\"\"\"".format(line)
 			format_arr = []
@@ -73,3 +89,9 @@ class Parse:
 			block += indent + line + "\n"
 		exec(block)
 		return Parse.templated_html
+
+	@staticmethod
+	def parse_if_statement(line):
+		detected = re.search(r"^{% (if|elif) (root|children\.\d+|children\.\d+.value) (==|!=|>|<|>=|<=) (\d+|\d+\.\d+|\".*\"|\'.*\'|True|False|None) %}$", line)
+		if detected:
+			return "{0} {{{1}}} {2} {3}:".format(detected.group(1), detected.group(2), detected.group(3), detected.group(4))
