@@ -8,6 +8,7 @@ class Parse:
 
 	@staticmethod
 	def parse_custom_template(text, json_obj, root):
+		"""parse statements and operations in the template"""
 		indent = ""
 		next_indent = ""
 		block = ""
@@ -89,6 +90,7 @@ class Parse:
 
 	@staticmethod
 	def parse_if_statement(line):
+		"""parse 'if' statements in the template"""
 		matched = re.search(r"^{% (if|elif) (root|children\.\d+|children\.\d+.value) (==|!=|>|<|>=|<=) (\d+|\d+\.\d+|\".*\"|\'.*\'|True|False|None) %}$", line)
 		if matched:
 			parsed_if = matched.group(1) + " " + matched.group(2) + " " + matched.group(3) + " " + str(matched.group(4)) + ":"
@@ -105,6 +107,7 @@ class Parse:
 
 	@staticmethod
 	def parse_for_statement(for_var):
+		"""parse 'for' statements in the template"""
 		try:
 			if not for_var.endswith(".value"):
 				child_depth = int(for_var[-1])
@@ -125,6 +128,7 @@ class Parse:
 
 	@staticmethod
 	def get_child_value(depth):
+		"""return the value of a child"""
 		child_val = "json_obj[root]"
 		for k in range(1, depth+1):
 			child_val += "[children{}]".format(k)
