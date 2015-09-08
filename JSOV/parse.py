@@ -49,9 +49,7 @@ class Parse:
 				old_variable, variable, child_depth, new_line = Parse.parse_if_statement(line)
 				if new_line:
 					if old_variable.endswith(".value"):
-						child_val = "json_obj[root]"
-						for k in range(1, child_depth+1):
-							child_val += "[children{}]".format(k)
+						child_val = Parse.get_child_value(child_depth)
 						line = new_line.replace(old_variable, child_val)
 					else:
 						line = new_line.replace(old_variable, variable).format("{0}={0}".format(variable))
@@ -76,9 +74,7 @@ class Parse:
 			matched_var = re.search(r"({{ children\.(\d+)\.value }})", line)
 			if matched_var:
 				child_depth = int(matched_var.group(2))
-				child_val = "json_obj[root]"
-				for k in range(1, child_depth+1):
-					child_val += "[children{}]".format(k)
+				child_val = Parse.get_child_value(child_depth)
 				line = line.replace(matched_var.group(1), "{children" + str(child_depth) + "val}")
 				format_arr.append(("children" + str(child_depth) + "val", child_val))
 			if len(format_arr) == 1:
@@ -126,3 +122,10 @@ class Parse:
 		except Exception:
 			print("Error: You can only use 'children.x' or 'children.x.value' where x is a number.")
 			sys.exit(1)
+
+	@staticmethod
+	def get_child_value(depth):
+		child_val = "json_obj[root]"
+		for k in range(1, depth+1):
+			child_val += "[children{}]".format(k)
+		return child_val
