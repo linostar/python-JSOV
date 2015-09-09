@@ -1,4 +1,5 @@
 # python-JSOV
+[![Build Status](https://travis-ci.org/linostar/python-JSOV.svg?branch=master)](https://travis-ci.org/linostar/python-JSOV)
 Python generator for JSOV (Javascript Object Visualization).
 
 **JSOV** is a template system used for visualizing JSON objects.
