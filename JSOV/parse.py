@@ -15,10 +15,12 @@ class Parse:
 		Parse.templated_html = ""
 		num_line = 0
 		lines = text.splitlines()
+		# checking line by line
 		for line in lines:
 			format_arr = []
 			num_line += 1
 			indent = next_indent
+			# detecting 'for' statements
 			if line.startswith("{% for ") and line.endswith(" %}"):
 				next_indent += "\t"
 				for_var = line[6:-2].strip()
@@ -29,6 +31,7 @@ class Parse:
 			elif line == "{% endfor %}":
 				next_indent = indent[:-1]
 				continue
+			# detecting 'if' statements
 			elif line.startswith("{% if") and line.endswith(" %}"):
 				next_indent += "\t"
 				new_line = Parse.parse_if_statement(line)
@@ -136,4 +139,5 @@ class Parse:
 			for key in variable.split("."):
 				new_variable += "['{}']".format(key)
 			return tmpl_var, new_variable
-		return tmpl_var, variable
+		print("Error: could not parse variable: {}".format(variable))
+		sys.exit(1)
