@@ -57,28 +57,20 @@ class Parse:
 				line = "Parse.templated_html += \"\"\"{}\"\"\"".format(line)
 			# substituting variables
 			new_line = line
-			# for matched_var in re.finditer(r"{{ (.+) }}", line):
-			# 	new_line = new_line.replace("{{ " + matched_var.group(1) + " }}",
-			# 		Parse.parse_variable(matched_var.group(1)))
-			# 	print(Parse.parse_variable(matched_var.group(1)), new_line)
-			matched_var = re.search(r"({{\schildren\.(\d+) }})", line)
-			if matched_var:
-				child_depth = matched_var.group(2)
-				line = line.replace(matched_var.group(1), "{children" + str(child_depth) + "}")
-				format_arr.append(("children" + str(child_depth), "children" + str(child_depth)))
-			matched_var = re.search(r"({{ children\.(\d+)\.value }})", line)
-			if matched_var:
-				child_depth = int(matched_var.group(2))
-				child_val = Parse.get_child_value(child_depth)
-				line = line.replace(matched_var.group(1), "{children" + str(child_depth) + "val}")
-				format_arr.append(("children" + str(child_depth) + "val", child_val))
-			if len(format_arr) == 1:
-				line += ".format({}={})".format(format_arr[0][0], format_arr[0][1])
-			elif len(format_arr) == 2:
-				line += ".format({}={}, {}={})".format(format_arr[0][0], format_arr[0][1],
-					format_arr[1][0], format_arr[1][1])
-			line = line.replace("{{ root }}", root)
-			block += indent + line + "\n"
+			count = 0
+			for matched_var in re.finditer(r"({{ ([^{]+) }})", line):
+				tmpl_var, new_var = Parse.parse_variable(matched_var.group(2))
+				new_line = new_line.replace(matched_var.group(1),
+					"{" + tmpl_var + "}")
+				format_arr.append((tmpl_var, new_var))
+				count += 1
+			format_arr = list(set(format_arr))
+			if format_arr:
+				new_line += ".format("
+				for (k, v) in format_arr:
+					new_line += "{}={},".format(k, v)
+				new_line += ")"
+			block += indent + new_line + "\n"
 		exec(block)
 		return Parse.templated_html
 
@@ -87,7 +79,8 @@ class Parse:
 		"""parse 'if' statements in the template"""
 		matched = re.search(r"^{% (if|elif) (root|children\.\d+|children\.\d+.value) (==|!=|>|<|>=|<=) (\d+|\d+\.\d+|\".*\"|\'.*\'|True|False|None) %}$", line)
 		if matched:
-			parsed_if = matched.group(1) + " " + Parse.parse_variable(matched.group(2)) + " " + matched.group(3) + " " + str(matched.group(4)) + ":"
+			tmpl_var, new_var = Parse.parse_variable(matched.group(2))
+			parsed_if = matched.group(1) + " " + new_var + " " + matched.group(3) + " " + str(matched.group(4)) + ":"
 			return parsed_if
 		else:
 			print("Syntax error in 'if' statement: {}".format(line))
@@ -119,18 +112,20 @@ class Parse:
 	@staticmethod
 	def parse_variable(variable):
 		"""parse variables in the template"""
+		tmpl_var = variable
 		if variable == "root":
-			return "json_obj[root]"
+			return tmpl_var, "list(json_obj.keys())[0]"
 		matched = re.search(r"^children\.(\d+)$", variable)
 		if matched:
-			return "children" + str(matched.group(1))
+			return "children" + str(matched.group(1)), "children" + str(matched.group(1))
 		matched = re.search(r"^children\.(\d+)\.value", variable)
 		if matched:
-			return Parse.get_child_value(int(matched.group(1)))
+			return "children{}val".format(matched.group(1)), Parse.get_child_value(int(matched.group(1)))
 		# check for hybrid combinations recursively
 		new_variable = variable
 		for matched in re.finditer(r"(children\.\d+)", variable):
-			new_variable = new_variable.replace(matched.group(1), Parse.parse_variable(matched.group(1)))
+			tmpl_var2, new_var2 = Parse.parse_variable(matched.group(1))
+			new_variable = new_variable.replace(matched.group(1), new_var2)
 		if new_variable != variable:
 			return Parse.parse_variable(new_variable)
 		# check for non-standard variables
@@ -140,5 +135,5 @@ class Parse:
 			new_variable = "json_obj"
 			for key in variable.split("."):
 				new_variable += "['{}']".format(key)
-			return new_variable
-		return variable
+			return tmpl_var, new_variable
+		return tmpl_var, variable
