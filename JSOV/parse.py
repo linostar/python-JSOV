@@ -56,7 +56,7 @@ class Parse:
 			else:
 				line = "Parse.templated_html += \"\"\"{}\"\"\"".format(line)
 			# substituting variables
-			# new_line = line
+			new_line = line
 			# for matched_var in re.finditer(r"{{ (.+) }}", line):
 			# 	new_line = new_line.replace("{{ " + matched_var.group(1) + " }}",
 			# 		Parse.parse_variable(matched_var.group(1)))
@@ -78,7 +78,7 @@ class Parse:
 				line += ".format({}={}, {}={})".format(format_arr[0][0], format_arr[0][1],
 					format_arr[1][0], format_arr[1][1])
 			line = line.replace("{{ root }}", root)
-			block += indent + new_line + "\n"
+			block += indent + line + "\n"
 		exec(block)
 		return Parse.templated_html
 
