@@ -33,14 +33,7 @@ class Parse:
 				next_indent += "\t"
 				old_variable, variable, child_depth, new_line = Parse.parse_if_statement(line)
 				if new_line:
-					if old_variable.endswith(".value"):
-						child_val = "json_obj[root]"
-						for k in range(1, child_depth+1):
-							child_val += "[children{}]".format(k)
-						line = new_line.replace(old_variable, child_val)
-					else:
-						line = new_line.replace(old_variable, variable).format("{0}={0}".format(variable))
-					block += indent + line + "\n"
+					block += indent + new_line + "\n"
 					continue
 				else:
 					print("Error in 'if' statement syntax.")
@@ -49,12 +42,7 @@ class Parse:
 				indent = indent[:-1]
 				old_variable, variable, child_depth, new_line = Parse.parse_if_statement(line)
 				if new_line:
-					if old_variable.endswith(".value"):
-						child_val = Parse.get_child_value(child_depth)
-						line = new_line.replace(old_variable, child_val)
-					else:
-						line = new_line.replace(old_variable, variable).format("{0}={0}".format(variable))
-					block += indent + line + "\n"
+					block += indent + new_line + "\n"
 					continue
 				else:
 					print("Error in 'elif' statement syntax.")
@@ -93,7 +81,7 @@ class Parse:
 		"""parse 'if' statements in the template"""
 		matched = re.search(r"^{% (if|elif) (root|children\.\d+|children\.\d+.value) (==|!=|>|<|>=|<=) (\d+|\d+\.\d+|\".*\"|\'.*\'|True|False|None) %}$", line)
 		if matched:
-			parsed_if = matched.group(1) + " " + matched.group(2) + " " + matched.group(3) + " " + str(matched.group(4)) + ":"
+			parsed_if = matched.group(1) + " " + Parse.parse_variable(matched.group(2)) + " " + matched.group(3) + " " + str(matched.group(4)) + ":"
 			if matched.group(2).endswith(".value"):
 				child_depth = re.search(r"(\d+)", matched.group(2))
 				variable = "children" + str(child_depth.group(1)) + "val"
@@ -104,6 +92,8 @@ class Parse:
 				variable = "root"
 				child_depth = 0
 			return matched.group(2), variable, int(child_depth.group(1)), parsed_if
+		else:
+			print("Syntax error in 'if' statement: {}".format(line))
 
 	@staticmethod
 	def parse_for_statement(for_var):
@@ -118,7 +108,7 @@ class Parse:
 			else:
 				pass
 		except Exception:
-			print("Error: You can only use 'children.x' or 'children.x.value' where x is a number.")
+			print("Error: You can only use 'children.x' in 'for' statements where x is a number.")
 			sys.exit(1)
 
 	@staticmethod
