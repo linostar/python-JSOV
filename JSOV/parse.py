@@ -55,6 +55,10 @@ class Parse:
 				continue
 			else:
 				line = "Parse.templated_html += \"\"\"{}\"\"\"".format(line)
+			# substituting variables
+			# new_line = line
+			# for matched_var in re.finditer(r"({{ .+ }})", line):
+			# 	new_line = new_line.replace(matched_var.group(1), Parse.parse_variable(matched_var.group(1)))
 			matched_var = re.search(r"({{\schildren\.(\d+) }})", line)
 			if matched_var:
 				child_depth = matched_var.group(2)
