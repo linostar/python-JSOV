@@ -111,14 +111,9 @@ class Parse:
 		try:
 			if not for_var.endswith(".value"):
 				child_depth = int(for_var[-1])
-				if child_depth == 1:
-					line = "for children1 in json_obj[root]:"
-				else:
-					nested_dict = "json_obj[root]"
-					for k in range(1, child_depth):
-						nested_dict += "[children{}]".format(k)
-					line = "for children{0} in {1}:".format(
-						str(child_depth), nested_dict)
+				nested_dict = Parse.get_child_value(child_depth-1)
+				line = "for children{0} in {1}:".format(
+					str(child_depth), nested_dict)
 				return line
 			else:
 				pass
