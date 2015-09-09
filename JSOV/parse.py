@@ -136,6 +136,7 @@ class Parse:
 
 	@staticmethod
 	def parse_variable(variable):
+		"""parse variables in the template"""
 		if variable == "root":
 			return "json_obj[root]"
 		matched = re.search(r"^children\.(\d+)$", variable)
@@ -144,3 +145,17 @@ class Parse:
 		matched = re.search(r"^children\.(\d+)\.value", variable)
 		if matched:
 			return Parse.get_child_value(int(matched.group(1)))
+		# check for hybrid combinations recursively
+		new_variable = variable
+		for matched in re.finditer(r"(children\.\d+)", variable):
+			new_variable = new_variable.replace(matched.group(1), Parse.parse_variable(matched.group(1)))
+		if new_variable != variable:
+			return Parse.parse_variable(new_variable)
+		# check for non-standard variables
+		matched = re.search(r"^([a-zA-Z0-9_-]+)(\.[a-zA-Z0-9_])*\.value$", variable)
+		if matched:
+			variable = variable[:-6]
+			new_variable = "json_obj"
+			for key in variable.split("."):
+				new_variable += "['{}']".format(key)
+			return new_variable
