@@ -31,7 +31,7 @@ class Parse:
 				continue
 			elif line.startswith("{% if") and line.endswith(" %}"):
 				next_indent += "\t"
-				old_variable, variable, child_depth, new_line = Parse.parse_if_statement(line)
+				new_line = Parse.parse_if_statement(line)
 				if new_line:
 					block += indent + new_line + "\n"
 					continue
@@ -40,7 +40,7 @@ class Parse:
 					sys.exit(1)
 			elif line.startswith("{% elif") and line.endswith(" %}"):
 				indent = indent[:-1]
-				old_variable, variable, child_depth, new_line = Parse.parse_if_statement(line)
+				new_line = Parse.parse_if_statement(line)
 				if new_line:
 					block += indent + new_line + "\n"
 					continue
@@ -82,16 +82,7 @@ class Parse:
 		matched = re.search(r"^{% (if|elif) (root|children\.\d+|children\.\d+.value) (==|!=|>|<|>=|<=) (\d+|\d+\.\d+|\".*\"|\'.*\'|True|False|None) %}$", line)
 		if matched:
 			parsed_if = matched.group(1) + " " + Parse.parse_variable(matched.group(2)) + " " + matched.group(3) + " " + str(matched.group(4)) + ":"
-			if matched.group(2).endswith(".value"):
-				child_depth = re.search(r"(\d+)", matched.group(2))
-				variable = "children" + str(child_depth.group(1)) + "val"
-			elif matched.group(2).startswith("children."):
-				child_depth = re.search(r"(\d+)", matched.group(2))
-				variable = "children" + str(child_depth.group(1))
-			else:
-				variable = "root"
-				child_depth = 0
-			return matched.group(2), variable, int(child_depth.group(1)), parsed_if
+			return parsed_if
 		else:
 			print("Syntax error in 'if' statement: {}".format(line))
 
