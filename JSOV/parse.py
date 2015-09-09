@@ -133,3 +133,14 @@ class Parse:
 		for k in range(1, depth+1):
 			child_val += "[children{}]".format(k)
 		return child_val
+
+	@staticmethod
+	def parse_variable(variable):
+		if variable == "root":
+			return "json_obj[root]"
+		matched = re.search(r"^children\.(\d+)$", variable)
+		if matched:
+			return "children" + str(matched.group(1))
+		matched = re.search(r"^children\.(\d+)\.value", variable)
+		if matched:
+			return Parse.get_child_value(int(matched.group(1)))
