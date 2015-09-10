@@ -132,7 +132,7 @@ class Parse:
 		if new_variable != variable:
 			return Parse.parse_variable(new_variable)
 		# check for non-standard variables
-		matched = re.search(r"^([a-zA-Z0-9_-]+)(\.[a-zA-Z0-9_])*\.value$", variable)
+		matched = re.search(r"^([a-zA-Z0-9_-]+)(\.[a-zA-Z0-9_]+)*\.value$", variable)
 		if matched:
 			variable = variable[:-6]
 			new_variable = "json_obj"
