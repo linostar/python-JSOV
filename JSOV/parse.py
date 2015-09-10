@@ -134,6 +134,7 @@ class Parse:
 		# check for non-standard variables
 		matched = re.search(r"^([a-zA-Z0-9_-]+)(\.[a-zA-Z0-9_]+)*\.value$", variable)
 		if matched:
+			tmpl_var = tmpl_var.replace(".", "_")
 			variable = variable[:-6]
 			new_variable = "json_obj"
 			for key in variable.split("."):
